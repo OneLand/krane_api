@@ -1,0 +1,63 @@
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.jdbc.Driver
+#    max-active: 25
+#    max-wait: 5000
+#    test-on-borrow: false
+#    test-while-idle: true
+#    validation-query: SELECT 1
+#    initial-size: 20
+#    default-auto-commit: false
+#    default-transaction-isolation: 2
+#    jmx-enabled: false
+#
+#    url: jdbc:mysql://localhost:3306/gacha?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&transformedBitIsBoolean=true
+#    username: root
+#    password:
+#    data: classpath:db/data.sql
+#    continue-on-error: false
+#    max-active: 10
+#    initial-size: 10
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    database: MYSQL
+#    show-sql: true
+#server:
+#  tomcat:
+#    max-threads: 100
+#    max-connections: 1000
+#rest-template:
+#  http-client-connection:
+#    max-total: 4000
+#    max-per-route: 100
+#  request-config:
+#    connection-request-timeout: 3000
+#    connect-timeout: 3000
+#    socket-timeout: 3000
+#  socket-config:
+#    so-keep-alive: true
+#    tcp-no-delay: true
+#
+#---
+#spring:
+#  profiles: local
+#---
+#spring:
+#  profiles: prod
+#---
+#spring:
+#  profiles: prod
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    generate-ddl: false
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/gachadoll?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&transformedBitIsBoolean=true
+    username: gachadoll
+    password: daily500
+    driver-class-name: com.mysql.jdbc.Driver
