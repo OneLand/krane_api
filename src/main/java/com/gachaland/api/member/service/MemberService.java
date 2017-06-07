@@ -1,7 +1,9 @@
-package com.gachaland.api.member.dao.service;
+package com.gachaland.api.member.service;
 
 import com.gachaland.api.member.dao.model.Member;
+import com.gachaland.api.member.dao.model.MemberWallet;
 import com.gachaland.api.member.dao.repository.MemberRepository;
+import com.gachaland.api.member.dao.repository.MemberWalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,9 @@ public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private MemberWalletRepository memberWalletRepository;
 
     public Member getMemberInfo(long memberId) {
         Member member = memberRepository.findOne(memberId);
@@ -28,7 +33,15 @@ public class MemberService {
         try {
             Member member = new Member();
             member.setPhoneNumber(phoneNumber);
-            memberRepository.save(member);
+            member = memberRepository.save(member);
+
+            MemberWallet memberWallet = new MemberWallet();
+            memberWallet.setMemberId(member.getId());
+            memberWallet.setCoin(0);
+            memberWallet.setRuby(0);
+            member.setMemberWallet(memberWallet);
+            memberWalletRepository.save(memberWallet);
+
         }
         catch (Exception ex) {
             return false;

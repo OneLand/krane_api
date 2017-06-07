@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by jhpark1220 on 2017. 6. 7..
@@ -27,6 +28,12 @@ public class Member {
 
     @Column(length = 255)
     private String address;     // 배송주소
+
+    @OneToOne(fetch = FetchType.EAGER)
+    private MemberWallet memberWallet;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<MemberCoupon> couponList;
 
 
 }

@@ -46,14 +46,11 @@ spring:
 ---
 
 spring:
-    profiles: alpha
+    profiles: cafe24
     datasource:
-        url: jdbc:mysql://localhost:3306/oneland?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
-        username: root
-        password:
-#        url: jdbc:mysql://localhost:3306/gacha?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&transformedBitIsBoolean=true
-#        username: gachadoll
-#        password: daily500
+        url: jdbc:mysql://localhost:3306/gachadoll?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+        username: gachadoll
+        password: daily500
 
 ---
 
@@ -72,4 +69,5 @@ spring:
 spring:
     profiles:
         active: local
+#        active: cafe24
 

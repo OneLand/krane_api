@@ -1,7 +1,7 @@
 package com.gachaland.api.member.controller;
 
 import com.gachaland.api.member.dao.model.Member;
-import com.gachaland.api.member.dao.service.MemberService;
+import com.gachaland.api.member.service.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
