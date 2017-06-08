@@ -21,7 +21,7 @@ public class MemberCoupon {
 
     private long memberId;
 
-    private long couponId;      // (StoreGoods id)
+    private long couponId;      // (StoreItem id)
 
     private boolean used;       // 쿠폰,이용권 사용 여부
 

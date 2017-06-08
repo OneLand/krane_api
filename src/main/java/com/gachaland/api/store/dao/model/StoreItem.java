@@ -10,8 +10,8 @@ import javax.persistence.*;
  */
 @Data
 @Entity
-@Table(name = "LandStoreGoods")
-public class StoreGoods {
+@Table(name = "LandStoreItem")
+public class StoreItem {
     // 상점에서 판매할 상품들 목록
 
 
@@ -27,6 +27,9 @@ public class StoreGoods {
     //    @Column(columnDefinition = "VARCHAR(32) default 'ALL'")
     @Enumerated(EnumType.STRING)
     @Column(length = 64)
-    private Enumerations.GoodsPayType goodsPayType;     // 구매타입 : 루비, 코인, 무료지급
+    private Enumerations.ItemPayType itemPayType;     // 구매타입 : 루비, 코인, 무료지급
+
+    @Column(columnDefinition = "BOOLEAN default 0", nullable = false)
+    private boolean enable;     // 아이템 활성 여부
 
 }

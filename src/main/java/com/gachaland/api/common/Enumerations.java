@@ -9,8 +9,12 @@ public class Enumerations {
         UP, DOWN, LEFT, RIGHT, PICK
     }
 
-    public enum GoodsPayType {
+    public enum ItemPayType {
         INAPP, RUBY, COIN, FREE        // 루비로 구매 / 코인으로 구매 / 무료
+    }
+
+    public enum ItemStatus {
+        ABLE, DISABLE        // 아이템 활성 / 비활성
     }
 
     public enum StoreGoodsType {
