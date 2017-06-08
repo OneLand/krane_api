@@ -39,7 +39,6 @@ public class MemberService {
             memberWallet.setMemberId(member.getId());
             memberWallet.setCoin(0);
             memberWallet.setRuby(0);
-            member.setMemberWallet(memberWallet);
             memberWalletRepository.save(memberWallet);
 
         }

@@ -30,9 +30,11 @@ public class Member {
     private String address;     // 배송주소
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private MemberWallet memberWallet;
 
     @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="memberId", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private List<MemberCoupon> couponList;
 
 
