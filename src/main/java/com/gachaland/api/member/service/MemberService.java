@@ -1,11 +1,14 @@
 package com.gachaland.api.member.service;
 
+import com.gachaland.api.common.Enumerations;
 import com.gachaland.api.member.dao.model.Member;
 import com.gachaland.api.member.dao.model.MemberWallet;
 import com.gachaland.api.member.dao.repository.MemberRepository;
 import com.gachaland.api.member.dao.repository.MemberWalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static com.gachaland.api.common.Enumerations.MemberType.GUEST;
 
 /**
  * Created by jhpark1220 on 2017. 6. 7..
@@ -29,10 +32,18 @@ public class MemberService {
         return member;
     }
 
-    public boolean registerMember(String phoneNumber) {
+    public boolean registerGuestMember(String memberType, String phoneNumber) {
+        Enumerations.MemberType mType = GUEST;
+        try {
+            mType = Enumerations.MemberType.valueOf(memberType);
+        } catch (Exception ex) {
+            mType = GUEST;
+        }
+
         try {
             Member member = new Member();
             member.setPhoneNumber(phoneNumber);
+            member.setMemberType(mType);
             member = memberRepository.save(member);
 
             MemberWallet memberWallet = new MemberWallet();

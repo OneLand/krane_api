@@ -1,5 +1,6 @@
 package com.gachaland.api.member.dao.model;
 
+import com.gachaland.api.common.Enumerations;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,10 @@ public class Member {
 
     @Column(length = 255)
     private String address;     // 배송주소
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 64)
+    private Enumerations.MemberType memberType;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))

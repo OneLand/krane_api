@@ -19,11 +19,12 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @ApiOperation(value = "멤버 가입하기 (전화번호)", notes = "멤버 가입")
+    @ApiOperation(value = "게스트 멤버 가입하기 (전화번호)", notes = "멤버 가입")
     @RequestMapping(method = RequestMethod.POST, value = "/register")
-    public Member registerMember(
+    public Member registerGuestMember(
+            @ApiParam(value = "type : android에서 폰번호를 가져올 수 있는 경우엔 MEMBER(정회원)로 받아야 함.", required = true) @RequestBody(required = true) String memberType,
             @ApiParam(value = "phoneNumber", required = true) @RequestBody(required = true) String phoneNumber) {
-        boolean result = memberService.registerMember(phoneNumber);
+        boolean result = memberService.registerGuestMember(memberType, phoneNumber);
 
         Member member = null;
         if (result == true) {

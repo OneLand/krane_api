@@ -5,6 +5,10 @@ package com.gachaland.api.common;
  */
 public class Enumerations {
 
+    public enum MemberType {
+        GUEST, MEMBER, GOOGLE, FACEBOOK
+    }
+
     public enum DirectionType {
         UP, DOWN, LEFT, RIGHT, PICK
     }
