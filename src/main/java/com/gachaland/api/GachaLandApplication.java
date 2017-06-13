@@ -10,7 +10,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @Configuration
 @EnableAutoConfiguration
-//@ComponentScan(basePackages = {"com.kakao.order.api", "com.kakao.order.core"})
 public class GachaLandApplication {
 
 	public static void main(String[] args) {

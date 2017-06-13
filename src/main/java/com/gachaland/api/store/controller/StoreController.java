@@ -47,7 +47,7 @@ public class StoreController {
     @RequestMapping(method = RequestMethod.GET, value = "/items/{type}")
     public List<StoreItem> registerGoods(
             @ApiParam(value = "type", required = true) @PathVariable String type) {
-        return storeService.getItems(type);
+        return storeService.getEnableItems(type);
     }
 
 }

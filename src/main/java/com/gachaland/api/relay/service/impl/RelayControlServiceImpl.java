@@ -1,8 +1,8 @@
-package com.gachaland.api.service.impl;
+package com.gachaland.api.relay.service.impl;
 
 import com.gachaland.api.common.Enumerations;
 import com.gachaland.api.config.RestClient;
-import com.gachaland.api.service.RelayControlService;
+import com.gachaland.api.relay.service.RelayControlService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

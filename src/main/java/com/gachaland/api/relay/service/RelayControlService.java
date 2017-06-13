@@ -1,4 +1,4 @@
-package com.gachaland.api.service;
+package com.gachaland.api.relay.service;
 
 /**
  * Created by chris.j3 on 2017. 5. 26..

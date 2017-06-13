@@ -1,6 +1,6 @@
-package com.gachaland.api.controller;
+package com.gachaland.api.relay.controller;
 
-import com.gachaland.api.service.RelayControlService;
+import com.gachaland.api.relay.service.RelayControlService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

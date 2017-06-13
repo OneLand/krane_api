@@ -12,4 +12,6 @@ import java.util.List;
 public interface StoreRepository extends JpaRepository<StoreItem, Long> {
     List<StoreItem> findByEnable(boolean enable);
     List<StoreItem> findByItemPayType(Enumerations.ItemPayType itemPayType);
+
+    List<StoreItem> findByEnableAndItemPayType(boolean enable, Enumerations.ItemPayType itemPayType);
 }

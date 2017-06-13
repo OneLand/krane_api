@@ -44,10 +44,11 @@ public class StoreService {
         }
     }
 
-    public List<StoreItem> getItems(String type) {
+    public List<StoreItem> getEnableItems(String type) {
         try {
             Enumerations.ItemPayType itemPayType = Enumerations.ItemPayType.valueOf(type);
-            return storeRepository.findByItemPayType(itemPayType);
+            return storeRepository.findByEnableAndItemPayType(true, itemPayType);
+//            return storeRepository.findByItemPayType(itemPayType);
         } catch (Exception ex) {
             return null;
         }

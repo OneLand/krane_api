@@ -25,4 +25,12 @@ public class Enumerations {
         RUBY, COIN, COUPON      // 루비 (inapp) / 코인 (ingame money) / 이용권 (무료,,,)
     }
 
+    public enum MemberHistoryStatus{
+        LOGIN,      // 접속
+        START,      // 게임시작
+        PURCHASE,   // 구매
+        EXCHANGE,   // 교환
+        END
+    }
+
 }

@@ -10,13 +10,11 @@ spring:
         default-auto-commit: false
         default-transaction-isolation: 2
         jmx-enabled: false
-
     jpa:
         hibernate:
             ddl-auto: create
         database: MYSQL
         show-sql: true
-
 server:
     tomcat:
         max-threads: 10
@@ -55,7 +53,7 @@ spring:
 ---
 
 spring:
-    profiles: prod
+    profiles: production
     datasource:
         url: jdbc:mysql://localhost:3306/oneland?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
         username: root
@@ -68,6 +66,6 @@ spring:
 
 spring:
     profiles:
-        active: local
-#        active: cafe24
+#        active: local
+        active: cafe24
 

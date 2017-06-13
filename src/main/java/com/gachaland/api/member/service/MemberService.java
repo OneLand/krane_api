@@ -2,11 +2,15 @@ package com.gachaland.api.member.service;
 
 import com.gachaland.api.common.Enumerations;
 import com.gachaland.api.member.dao.model.Member;
+import com.gachaland.api.member.dao.model.MemberHistory;
 import com.gachaland.api.member.dao.model.MemberWallet;
+import com.gachaland.api.member.dao.repository.MemberHistoryRepository;
 import com.gachaland.api.member.dao.repository.MemberRepository;
 import com.gachaland.api.member.dao.repository.MemberWalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 import static com.gachaland.api.common.Enumerations.MemberType.GUEST;
 
@@ -21,6 +25,9 @@ public class MemberService {
 
     @Autowired
     private MemberWalletRepository memberWalletRepository;
+
+    @Autowired
+    private MemberHistoryRepository memberHistoryRepository;
 
     public Member getMemberInfo(long memberId) {
         Member member = memberRepository.findOne(memberId);
@@ -57,6 +64,28 @@ public class MemberService {
             return false;
         }
         return true;
+    }
+
+    public void loggingMemberHistory(long memberId, String status) {
+        Member member = getMemberInfo(memberId);
+        Enumerations.MemberHistoryStatus historyStatus = Enumerations.MemberHistoryStatus.END;
+        try {
+            historyStatus = Enumerations.MemberHistoryStatus.valueOf(status);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        loggingMemberHistory(member, historyStatus);
+    }
+
+    private void loggingMemberHistory(Member member, Enumerations.MemberHistoryStatus status) {
+        MemberHistory memberHistory = new MemberHistory();
+        memberHistory.setIssueDate(LocalDateTime.now());
+        memberHistory.setMemberHistoryStatus(status);
+        memberHistory.setMemberId(member.getId());
+        memberHistory.setPayload("logging");
+
+        memberHistoryRepository.saveAndFlush(memberHistory);
     }
 
 }
