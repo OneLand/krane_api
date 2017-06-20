@@ -75,9 +75,6 @@ allprojects {
         compile ('com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.0.pr1')
 
         runtime('mysql:mysql-connector-java')
-//        optional ("org.springframework.boot:spring-boot-configuration-processor")
-//        testCompile('junit:junit:4.12')
-//        testCompile ('org.hamcrest:hamcrest-library:1.3')
     }
 
 }

@@ -7,6 +7,8 @@ import com.gachaland.api.member.dao.model.MemberWallet;
 import com.gachaland.api.member.dao.repository.MemberHistoryRepository;
 import com.gachaland.api.member.dao.repository.MemberRepository;
 import com.gachaland.api.member.dao.repository.MemberWalletRepository;
+import com.gachaland.api.member.dto.mapper.MemberMapper;
+import com.gachaland.api.member.dto.model.MemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,14 +31,17 @@ public class MemberService {
     @Autowired
     private MemberHistoryRepository memberHistoryRepository;
 
-    public Member getMemberInfo(long memberId) {
+    @Autowired
+    private MemberMapper memberMapper;
+
+    public MemberDTO getMemberInfo(long memberId) {
         Member member = memberRepository.findOne(memberId);
-        return member;
+        return memberMapper.mappingMemberDTO(member);
     }
 
-    public Member getMemberInfo(String phoneNumber) {
+    public MemberDTO getMemberInfo(String phoneNumber) {
         Member member = memberRepository.findByPhoneNumber(phoneNumber);
-        return member;
+        return memberMapper.mappingMemberDTO(member);
     }
 
     public boolean registerGuestMember(String memberType, String phoneNumber) {
@@ -67,7 +72,7 @@ public class MemberService {
     }
 
     public void loggingMemberHistory(long memberId, String status) {
-        Member member = getMemberInfo(memberId);
+        Member member = memberRepository.findOne(memberId);
         Enumerations.MemberHistoryStatus historyStatus = Enumerations.MemberHistoryStatus.END;
         try {
             historyStatus = Enumerations.MemberHistoryStatus.valueOf(status);

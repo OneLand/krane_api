@@ -9,6 +9,10 @@ public class Enumerations {
         GUEST, MEMBER, GOOGLE, FACEBOOK
     }
 
+    public enum MemberStatus {
+        UNREGISTERED, REGISTERED, ABUSER
+    }
+
     public enum DirectionType {
         UP, DOWN, LEFT, RIGHT, PICK
     }

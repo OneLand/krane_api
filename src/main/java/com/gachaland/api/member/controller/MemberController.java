@@ -1,11 +1,13 @@
 package com.gachaland.api.member.controller;
 
-import com.gachaland.api.member.dao.model.Member;
+import com.gachaland.api.member.dto.model.MemberDTO;
+import com.gachaland.api.member.dto.model.RegisterBody;
 import com.gachaland.api.member.service.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,32 +22,26 @@ public class MemberController {
     private MemberService memberService;
 
     @ApiOperation(value = "게스트 멤버 가입하기 (전화번호)", notes = "멤버 가입")
-    @RequestMapping(method = RequestMethod.POST, value = "/register")
-    public Member registerGuestMember(
-            @ApiParam(value = "type : android에서 폰번호를 가져올 수 있는 경우엔 MEMBER(정회원)로 받아야 함.", required = true) @RequestBody(required = true) String memberType,
-            @ApiParam(value = "phoneNumber", required = true) @RequestBody(required = true) String phoneNumber) {
-        boolean result = memberService.registerGuestMember(memberType, phoneNumber);
-
-        Member member = null;
-        if (result == true) {
-            member = memberService.getMemberInfo(phoneNumber);
-        }
-        return member;
+    @RequestMapping(method = RequestMethod.POST, value = "/register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public String registerGuestMember(
+            @ApiParam(name="body", value = "가입 정보 JSON", required = true) @RequestBody RegisterBody registerBody) {
+        boolean result = memberService.registerGuestMember(registerBody.getMemberType(), registerBody.getPhoneNumber());
+        return (result?"SUCCESS":"FALSE");
     }
 
     @ApiOperation(value = "Member ID로 정보 조회", notes = "멤버 Id로 멤버 조회 ")
     @RequestMapping(method = RequestMethod.GET, value = "/{memberId}")
-    public Member getMemberInfoById( @ApiParam(value = "memberId", required = true) @PathVariable long memberId) {
-        Member member = memberService.getMemberInfo(memberId);
+    public MemberDTO getMemberInfoById(@ApiParam(value = "memberId", required = true) @PathVariable long memberId) {
+        MemberDTO member = memberService.getMemberInfo(memberId);
         return member;
     }
 
     @ApiOperation(value = "전화번호로 멤버 정보 조회", notes = "전화번호로 멤버 조회 ")
     @RequestMapping(method = RequestMethod.GET, value = "/phone")
-    public Member getMemberInfoByPhoneNum(
+    public MemberDTO getMemberInfoByPhoneNum(
         @ApiParam(name="num", required = true, value="0") @RequestParam(value = "num", required = true, defaultValue = "") String phoneNumber) {
 
-        Member member = memberService.getMemberInfo(phoneNumber);
+        MemberDTO member = memberService.getMemberInfo(phoneNumber);
         return member;
     }
 
