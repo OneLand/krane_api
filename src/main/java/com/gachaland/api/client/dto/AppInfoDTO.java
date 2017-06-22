@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor @AllArgsConstructor
-public class AppInfo implements Serializable {
+public class AppInfoDTO implements Serializable {
 
     // 서비스 활성 여부
     private boolean available;
