@@ -1,5 +1,8 @@
 package com.gachaland.api.member.controller;
 
+import com.gachaland.api.common.api.ResponseDTO;
+import com.gachaland.api.common.api.StandardResponse;
+import com.gachaland.api.common.constants.ResultCode;
 import com.gachaland.api.member.dto.model.MemberDTO;
 import com.gachaland.api.member.dto.model.RegisterBody;
 import com.gachaland.api.member.service.MemberService;
@@ -23,26 +26,32 @@ public class MemberController {
 
     @ApiOperation(value = "게스트 멤버 가입하기 (전화번호)", notes = "멤버 가입")
     @RequestMapping(method = RequestMethod.POST, value = "/register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String registerGuestMember(
+    public StandardResponse registerGuestMember(
             @ApiParam(name="body", value = "가입 정보 JSON", required = true) @RequestBody RegisterBody registerBody) {
         boolean result = memberService.registerGuestMember(registerBody.getMemberType(), registerBody.getPhoneNumber());
-        return (result?"SUCCESS":"FALSE");
+
+        if (result) {
+            return new StandardResponse(ResultCode.OK.getCode(), "SUCCESS");
+        }
+        else {
+            return new StandardResponse(ResultCode.OK.getCode(), "FAIL");
+        }
     }
 
     @ApiOperation(value = "Member ID로 정보 조회", notes = "멤버 Id로 멤버 조회 ")
     @RequestMapping(method = RequestMethod.GET, value = "/{memberId}")
-    public MemberDTO getMemberInfoById(@ApiParam(value = "memberId", required = true) @PathVariable long memberId) {
+    public StandardResponse getMemberInfoById(@ApiParam(value = "memberId", required = true) @PathVariable long memberId) {
         MemberDTO member = memberService.getMemberInfo(memberId);
-        return member;
+        return new StandardResponse(ResultCode.OK.getCode(), "SUCCESS", member);
     }
 
     @ApiOperation(value = "전화번호로 멤버 정보 조회", notes = "전화번호로 멤버 조회 ")
     @RequestMapping(method = RequestMethod.GET, value = "/phone")
-    public MemberDTO getMemberInfoByPhoneNum(
+    public StandardResponse getMemberInfoByPhoneNum(
         @ApiParam(name="num", required = true, value="0") @RequestParam(value = "num", required = true, defaultValue = "") String phoneNumber) {
 
         MemberDTO member = memberService.getMemberInfo(phoneNumber);
-        return member;
+        return new StandardResponse(ResultCode.OK.getCode(), "SUCCESS", member);
     }
 
 }
