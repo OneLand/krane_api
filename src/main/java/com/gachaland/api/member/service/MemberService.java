@@ -9,10 +9,13 @@ import com.gachaland.api.member.dao.repository.MemberRepository;
 import com.gachaland.api.member.dao.repository.MemberWalletRepository;
 import com.gachaland.api.member.dto.mapper.MemberMapper;
 import com.gachaland.api.member.dto.model.MemberDTO;
+import com.gachaland.api.member.dto.model.MemberHistoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 import static com.gachaland.api.common.Enumerations.MemberType.GUEST;
 
@@ -85,12 +88,17 @@ public class MemberService {
 
     private void loggingMemberHistory(Member member, Enumerations.MemberHistoryStatus status) {
         MemberHistory memberHistory = new MemberHistory();
-        memberHistory.setIssueDate(LocalDateTime.now());
+        memberHistory.setIssueDate(new Date());
         memberHistory.setMemberHistoryStatus(status);
         memberHistory.setMemberId(member.getId());
         memberHistory.setPayload("logging");
 
         memberHistoryRepository.saveAndFlush(memberHistory);
+    }
+
+    public MemberHistoryDTO getLoggingMemberHistory(long memberId) {
+        List<MemberHistory> histories = memberHistoryRepository.findByMemberId(memberId);
+        return memberMapper.mappingMemberHistoryDTO(memberId, histories);
     }
 
 }

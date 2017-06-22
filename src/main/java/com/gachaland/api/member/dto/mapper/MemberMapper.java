@@ -1,13 +1,17 @@
 package com.gachaland.api.member.dto.mapper;
 
 import com.gachaland.api.common.Enumerations;
+import com.gachaland.api.common.utils.DateUtils;
 import com.gachaland.api.member.dao.model.Member;
 import com.gachaland.api.member.dao.model.MemberCoupon;
+import com.gachaland.api.member.dao.model.MemberHistory;
 import com.gachaland.api.member.dto.model.CouponDTO;
 import com.gachaland.api.member.dto.model.MemberDTO;
+import com.gachaland.api.member.dto.model.MemberHistoryDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,6 +46,21 @@ public class MemberMapper {
             couponDTOs.add(couponDTO);
         }
         return couponDTOs;
+    }
+
+    public MemberHistoryDTO mappingMemberHistoryDTO(long memberId, List<MemberHistory> historyList) {
+        List<MemberHistoryDTO.History> memberHistories = new ArrayList<>();
+        for (MemberHistory history : historyList) {
+            MemberHistoryDTO.History h = new MemberHistoryDTO.History();
+            h.setIssueDate(DateUtils.getFormattedString(history.getIssueDate()));
+            h.setStatus(history.getMemberHistoryStatus());
+            memberHistories.add(h);
+        }
+
+        MemberHistoryDTO historyDTO = new MemberHistoryDTO();
+        historyDTO.setMemberId(memberId);
+        historyDTO.setHistory(memberHistories);
+        return historyDTO;
     }
 
 }

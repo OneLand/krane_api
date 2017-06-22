@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * Created by chris.j3 on 2017. 6. 13..
@@ -27,7 +28,7 @@ public class MemberHistory {
     @Column(length = 64)
     private Enumerations.MemberHistoryStatus memberHistoryStatus;
 
-    private LocalDateTime issueDate;
+    private Date issueDate;
 
     private String payload;
 
