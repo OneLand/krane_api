@@ -1,7 +1,9 @@
 package com.gachaland.api.store.controller;
 
+import com.gachaland.api.common.api.StandardResponse;
+import com.gachaland.api.common.constants.ResultCode;
 import com.gachaland.api.store.controller.model.ItemBody;
-import com.gachaland.api.store.dao.model.StoreItem;
+import com.gachaland.api.store.dto.model.StoreItemDTO;
 import com.gachaland.api.store.service.StoreService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,30 +26,37 @@ public class StoreController {
 
     @ApiOperation(value = "상품 등록하기", notes = "상품 등록")
     @RequestMapping(method = RequestMethod.POST, value = "/item")
-    public StoreItem registerGoods(
+    public StandardResponse registerGoods(
             @ApiParam(value = "상품정보", required = true) @RequestBody(required = true) ItemBody item) {
 
-        return storeService.registerGoods(item);
+        StoreItemDTO itemDTO = storeService.registerStoreItem(item);
+        return new StandardResponse(ResultCode.OK.getCode(), ResultCode.OK.name(), itemDTO);
     }
 
     @ApiOperation(value = "상품 조회 하기", notes = "상품 조회")
     @RequestMapping(method = RequestMethod.GET, value = "/item/{itemId}")
-    public StoreItem registerGoods( @ApiParam(value = "itemId", required = true) @PathVariable long itemId) {
-        return storeService.getItem(itemId);
+    public StandardResponse registerGoods( @ApiParam(value = "itemId", required = true) @PathVariable long itemId) {
+
+        StoreItemDTO itemDTO = storeService.getItemDTO(itemId);
+        return new StandardResponse(ResultCode.OK.getCode(), ResultCode.OK.name(), itemDTO);
     }
 
     @ApiOperation(value = "등록된 모든 상품 조회 하기", notes = "등록된 상품 조회")
     @RequestMapping(method = RequestMethod.GET, value = "/items")
-    public List<StoreItem> registerGoods(
+    public StandardResponse registerGoods(
             @ApiParam(name="enable", required = false, value="0") @RequestParam(value = "enable", required = false, defaultValue = "") Boolean enable) {
-        return storeService.getItems(enable);
+
+        List<StoreItemDTO> itemDTOs = storeService.getItemDTOs(enable);
+        return new StandardResponse(ResultCode.OK.getCode(), ResultCode.OK.name(), itemDTOs);
     }
 
     @ApiOperation(value = "Item Type으로 상품 조회 하기", notes = "Type별 상품 조회")
     @RequestMapping(method = RequestMethod.GET, value = "/items/{type}")
-    public List<StoreItem> registerGoods(
+    public StandardResponse registerGoods(
             @ApiParam(value = "type", required = true) @PathVariable String type) {
-        return storeService.getEnableItems(type);
+
+        List<StoreItemDTO> itemDTOs = storeService.getEnableItemDTOs(type);
+        return new StandardResponse(ResultCode.OK.getCode(), ResultCode.OK.name(), itemDTOs);
     }
 
 }

@@ -4,10 +4,13 @@ import com.gachaland.api.common.Enumerations;
 import com.gachaland.api.store.controller.model.ItemBody;
 import com.gachaland.api.store.dao.model.StoreItem;
 import com.gachaland.api.store.dao.repository.StoreRepository;
+import com.gachaland.api.store.dto.mapper.StoreItemMapper;
+import com.gachaland.api.store.dto.model.StoreItemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by jhpark1220 on 2017. 6. 9..
@@ -18,8 +21,29 @@ public class StoreService {
     @Autowired
     private StoreRepository storeRepository;
 
-    public StoreItem registerGoods(ItemBody itemBody) {
+    @Autowired
+    private StoreItemMapper storeItemMapper;
 
+    public StoreItemDTO registerStoreItem(ItemBody itemBody) {
+        StoreItem item = registerItem(itemBody);
+        return storeItemMapper.mappingStoreItem(item);
+    }
+
+    public StoreItemDTO getItemDTO(long itemId) {
+        return storeItemMapper.mappingStoreItem(getItem(itemId));
+    }
+
+    public List<StoreItemDTO> getItemDTOs(boolean enable) {
+        List<StoreItemDTO> itemDTOs = getItems(enable).stream().map(item -> storeItemMapper.mappingStoreItem(item)).collect(Collectors.toList());
+        return itemDTOs;
+    }
+
+    public List<StoreItemDTO> getEnableItemDTOs(String type) {
+        List<StoreItemDTO> itemDTOs = getEnableItems(type).stream().map(item -> storeItemMapper.mappingStoreItem(item)).collect(Collectors.toList());
+        return itemDTOs;
+    }
+
+    public StoreItem registerItem(ItemBody itemBody) {
         StoreItem storeItem = new StoreItem();
         storeItem.setName(itemBody.getName());
         storeItem.setValue(itemBody.getValue());

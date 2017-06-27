@@ -66,6 +66,6 @@ spring:
 
 spring:
     profiles:
-        active: local
-#        active: cafe24
+#        active: local
+        active: cafe24
 

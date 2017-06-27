@@ -13,8 +13,6 @@ import javax.persistence.*;
 @Table(name = "LandStoreItem")
 public class StoreItem {
     // 상점에서 판매할 상품들 목록
-
-
     @Id
     @GeneratedValue
     private long id;

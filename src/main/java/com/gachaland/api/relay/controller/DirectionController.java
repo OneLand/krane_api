@@ -1,5 +1,7 @@
 package com.gachaland.api.relay.controller;
 
+import com.gachaland.api.common.api.StandardResponse;
+import com.gachaland.api.common.constants.ResultCode;
 import com.gachaland.api.relay.service.RelayControlService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,11 +25,11 @@ public class DirectionController {
 
     @ApiOperation(value = "방향키 릴레이", notes = "방향키 릴레이 API")
     @RequestMapping(method = RequestMethod.GET, value = "/direction")
-    public String controlDirectionAPI( @ApiParam(name="value", required = true, value="UP/DOWN/LEFT/RIGHT") @RequestParam(value = "value", required = true, defaultValue = "") String value,
-                                       @ApiParam(name="move", required = true, value="true/false") @RequestParam(value = "move", required = true, defaultValue = "") Boolean onOff) {
+    public StandardResponse controlDirectionAPI(@ApiParam(name="value", required = true, value="UP/DOWN/LEFT/RIGHT") @RequestParam(value = "value", required = true, defaultValue = "") String value,
+                                                @ApiParam(name="move", required = true, value="true/false") @RequestParam(value = "move", required = true, defaultValue = "") Boolean onOff) {
 
         boolean result = relayControlService.relayController(value, onOff);
-        return (result ? "SUCCESS" : "FAIL");
+        return new StandardResponse(ResultCode.OK.getCode(), (result ? "SUCCESS" : "FAIL"));
     }
 
 }

@@ -12,8 +12,8 @@ import com.gachaland.api.member.dto.model.MemberDTO;
 import com.gachaland.api.member.dto.model.MemberHistoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +47,8 @@ public class MemberService {
         return memberMapper.mappingMemberDTO(member);
     }
 
-    public boolean registerGuestMember(String memberType, String phoneNumber) {
+    @Transactional
+    public long registerGuestMember(String memberType, String phoneNumber) {
         Enumerations.MemberType mType = GUEST;
         try {
             mType = Enumerations.MemberType.valueOf(memberType);
@@ -55,8 +56,8 @@ public class MemberService {
             mType = GUEST;
         }
 
+        Member member = new Member();
         try {
-            Member member = new Member();
             member.setPhoneNumber(phoneNumber);
             member.setMemberType(mType);
             member = memberRepository.save(member);
@@ -66,12 +67,12 @@ public class MemberService {
             memberWallet.setCoin(0);
             memberWallet.setRuby(0);
             memberWalletRepository.save(memberWallet);
-
         }
         catch (Exception ex) {
-            return false;
+            return 0;
         }
-        return true;
+
+        return member.getId();
     }
 
     public void loggingMemberHistory(long memberId, String status) {
