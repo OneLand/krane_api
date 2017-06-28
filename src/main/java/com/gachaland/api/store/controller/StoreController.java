@@ -41,6 +41,15 @@ public class StoreController {
         return new StandardResponse(ResultCode.OK.getCode(), ResultCode.OK.name(), itemDTO);
     }
 
+    @ApiOperation(value = "상품 활성/비활성 변경 하기", notes = "상품 변경")
+    @RequestMapping(method = RequestMethod.POST, value = "/item/{itemId}/{enable}")
+    public StandardResponse registerGoods( @ApiParam(value = "itemId", required = true) @PathVariable long itemId,
+                                           @ApiParam(value = "enable", required = true) @PathVariable boolean enable) {
+
+        StoreItemDTO itemDTO = storeService.updateItemStatus(itemId, enable);
+        return new StandardResponse(ResultCode.OK.getCode(), ResultCode.OK.name(), itemDTO);
+    }
+
     @ApiOperation(value = "등록된 모든 상품 조회 하기", notes = "등록된 상품 조회")
     @RequestMapping(method = RequestMethod.GET, value = "/items")
     public StandardResponse registerGoods(

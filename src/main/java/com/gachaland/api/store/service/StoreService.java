@@ -33,7 +33,19 @@ public class StoreService {
         return storeItemMapper.mappingStoreItem(getItem(itemId));
     }
 
-    public List<StoreItemDTO> getItemDTOs(boolean enable) {
+    public StoreItemDTO updateItemStatus(long itemId, boolean enable) {
+        StoreItem item = getItem(itemId);
+        if (item == null) {
+            return null;
+        }
+
+        item.setEnable(enable);
+        storeRepository.save(item);
+
+        return storeItemMapper.mappingStoreItem(item);
+    }
+
+    public List<StoreItemDTO> getItemDTOs(Boolean enable) {
         List<StoreItemDTO> itemDTOs = getItems(enable).stream().map(item -> storeItemMapper.mappingStoreItem(item)).collect(Collectors.toList());
         return itemDTOs;
     }
