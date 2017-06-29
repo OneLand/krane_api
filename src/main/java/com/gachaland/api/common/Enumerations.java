@@ -34,7 +34,16 @@ public class Enumerations {
         START,      // 게임시작
         PURCHASE,   // 구매
         EXCHANGE,   // 교환
+        ROOM_JOIN,  // 게임방 입장
+        ROOM_EXIT,   // 게임방 퇴장
         END
+    }
+
+    public enum GameRoomType {
+        RUBY_ROOM,      // 루비방
+        GOLD_ROOM,      // 골드방
+        FREE_ROOM,      // 무료방
+        AD_ROOM,        // 광고방
     }
 
 }

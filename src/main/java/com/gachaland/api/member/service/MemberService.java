@@ -94,7 +94,18 @@ public class MemberService {
         memberHistory.setMemberId(member.getId());
         memberHistory.setPayload("logging");
 
-        memberHistoryRepository.saveAndFlush(memberHistory);
+        memberHistoryRepository.save(memberHistory);
+    }
+
+    public void loggingMemberGameHistory(Member member, Enumerations.MemberHistoryStatus status, long roomId, String payload) {
+        MemberHistory memberHistory = new MemberHistory();
+        memberHistory.setIssueDate(new Date());
+        memberHistory.setMemberHistoryStatus(status);
+        memberHistory.setMemberId(member.getId());
+        memberHistory.setPayload(payload);
+        memberHistory.setGameRoomId(roomId);
+
+        memberHistoryRepository.save(memberHistory);
     }
 
     public MemberHistoryDTO getLoggingMemberHistory(long memberId) {

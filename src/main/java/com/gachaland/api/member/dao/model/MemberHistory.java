@@ -32,4 +32,7 @@ public class MemberHistory {
 
     private String payload;
 
+    @Column(nullable = true)
+    private Long gameRoomId;
+
 }
