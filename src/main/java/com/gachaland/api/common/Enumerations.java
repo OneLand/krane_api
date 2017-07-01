@@ -46,4 +46,10 @@ public class Enumerations {
         AD_ROOM,        // 광고방
     }
 
+    public enum GameMode {
+        CATCH,          // 잡기
+        PUSH,           // 밀기
+        STACK,
+    }
+
 }

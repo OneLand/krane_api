@@ -20,6 +20,12 @@ public class Room {
     @Column(length = 64)
     private String name;    // 운영용
 
+    @Column(length = 64)
+    private String gameMode;
+
+    @Column(length = 64)
+    private String gameModeName;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 64)
     private Enumerations.GameRoomType gameRoomType;

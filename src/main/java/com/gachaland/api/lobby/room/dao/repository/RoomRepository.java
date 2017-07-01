@@ -13,5 +13,5 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     List<Room> findByActiveTrueAndVisibleTrue();
     List<Room> findByActiveTrue();
     List<Room> findByVisibleTrue();
-    List<Room> findByVisibleTrueAndGameRoomType(Enumerations.GameRoomType type);
+    List<Room> findByVisibleTrueAndGameMode(String mode);
 }

@@ -33,9 +33,12 @@ public class RoomService {
     @Autowired
     private RoomMapper roomMapper;
 
+    // TODO - 게임모드는 자유롭게.. 일단은 String으로 처리 한다
     public Room adminRegisterRoom(RoomDTO roomDTO, boolean immediate) {
         Room room = new Room();
         room.setName(roomDTO.getName());
+        room.setGameMode(roomDTO.getGameMode());
+        room.setGameModeName(roomDTO.getGameModeName());
         room.setDescription(roomDTO.getDescription());
         room.setGameRoomType(roomDTO.getGameRoomType());
         room.setActive(false);
@@ -64,20 +67,21 @@ public class RoomService {
         List<Room> rooms = roomRepository.findByVisibleTrue();
 
         for (Room room : rooms) {
-            if (listMap.containsKey(room.getGameRoomType().name())) {
-                listMap.get(room.getGameRoomType().name()).add(roomMapper.createRoomDTO(room));
+            if (listMap.containsKey(room.getGameMode())) {
+                listMap.get(room.getGameMode()).add(roomMapper.createRoomDTO(room));
             }
             else {
                 List<RoomDTO> list = new ArrayList<>();
                 list.add(roomMapper.createRoomDTO(room));
-                listMap.put(room.getGameRoomType().name(), list);
+                listMap.put(room.getGameMode(), list);
             }
         }
         return listMap;
     }
 
-    public List<RoomDTO> getGameRoomList(Enumerations.GameRoomType type) {
-        List<RoomDTO> list = roomRepository.findByVisibleTrueAndGameRoomType(type)
+    // TODO - 게임모드는 자유롭게.. 일단은 String으로 처리 한다
+    public List<RoomDTO> getGameRoomList(String mode) {
+        List<RoomDTO> list = roomRepository.findByVisibleTrueAndGameMode(mode)
                                             .stream()
                                             .map(room -> roomMapper.createRoomDTO(room))
                                             .collect(Collectors.toList());

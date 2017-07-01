@@ -56,12 +56,12 @@ public class GameRoomController {
     }
 
     @ApiOperation(value = "게임방 목록 조회", notes = "게임방 목록")
-    @RequestMapping(method = RequestMethod.GET, value = "/{room_type}")
-    public StandardResponse getGameRoomsForType(
-            @ApiParam(value = "게임방 Type", required = true) @PathVariable(value = "room_type") String roomType) {
+    @RequestMapping(method = RequestMethod.GET, value = "/{game_mode}")
+    public StandardResponse getGameRoomsByMode(
+            @ApiParam(value = "게임Mode", required = true) @PathVariable(value = "game_mode") String gameMode) {
 
-        Enumerations.GameRoomType type = Enumerations.GameRoomType.valueOf(roomType);
-        List<RoomDTO> lists = roomService.getGameRoomList(type);
+//        Enumerations.GameMode mode = Enumerations.GameMode.valueOf(gameMode);
+        List<RoomDTO> lists = roomService.getGameRoomList(gameMode);
         return new StandardResponse(ResultCode.OK.getCode(), ResultCode.OK.name(), lists);
     }
 }

@@ -18,6 +18,10 @@ public class RoomDTO {
 
     private long roomId;
 
+    private String gameMode;
+
+    private String gameModeName;
+
     private Enumerations.GameRoomType gameRoomType;
 
     private boolean active;     // 게임방 활성 여부

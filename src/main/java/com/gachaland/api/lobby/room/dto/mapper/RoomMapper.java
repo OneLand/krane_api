@@ -13,6 +13,8 @@ public class RoomMapper {
     public RoomDTO createRoomDTO(Room room) {
         RoomDTO roomDTO = new RoomDTO();
         roomDTO.setRoomId(room.getId());
+        roomDTO.setGameMode(room.getGameMode());
+        roomDTO.setGameModeName(room.getGameModeName());
         roomDTO.setGameRoomType(room.getGameRoomType());
         roomDTO.setName(room.getName());
         roomDTO.setDescription(room.getDescription());
