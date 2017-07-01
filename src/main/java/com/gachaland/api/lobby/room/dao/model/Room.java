@@ -30,13 +30,13 @@ public class Room {
     @Column(columnDefinition = "BOOLEAN default 0", nullable = false)
     private boolean active;     // 게임방 활성 여부
 
-    @Column(columnDefinition = "default 50", nullable = false)
+    @Column(columnDefinition = "int default 50", nullable = false)
     private int limitUserCount;
 
-    @Column(columnDefinition = "default 0", nullable = false)
+    @Column(columnDefinition = "int default 0", nullable = false)
     private int viewerCount;
 
-    @Column(columnDefinition = "default 0", nullable = false)
+    @Column(columnDefinition = "int default 0", nullable = false)
     private int joinerCount;
 
     @Column(length = 255)

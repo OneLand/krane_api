@@ -4,11 +4,19 @@ package com.gachaland.api.lobby.room.service;
 import com.gachaland.api.common.Enumerations;
 import com.gachaland.api.lobby.room.dao.model.Room;
 import com.gachaland.api.lobby.room.dao.repository.RoomRepository;
+import com.gachaland.api.lobby.room.dto.mapper.RoomMapper;
 import com.gachaland.api.lobby.room.dto.model.RoomDTO;
 import com.gachaland.api.member.dao.model.Member;
 import com.gachaland.api.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Created by jhpark1220 on 2017. 6. 30..
@@ -21,6 +29,9 @@ public class RoomService {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private RoomMapper roomMapper;
 
     public Room adminRegisterRoom(RoomDTO roomDTO, boolean immediate) {
         Room room = new Room();
@@ -46,6 +57,32 @@ public class RoomService {
         room.setVisible(visible);
         roomRepository.save(room);
         return room;
+    }
+
+    public Map<String, List<RoomDTO>> getGameRoomList() {
+        Map<String, List<RoomDTO>> listMap = new HashMap<>();
+        List<Room> rooms = roomRepository.findByVisibleTrue();
+
+        for (Room room : rooms) {
+            if (listMap.containsKey(room.getGameRoomType().name())) {
+                listMap.get(room.getGameRoomType().name()).add(roomMapper.createRoomDTO(room));
+            }
+            else {
+                List<RoomDTO> list = new ArrayList<>();
+                list.add(roomMapper.createRoomDTO(room));
+                listMap.put(room.getGameRoomType().name(), list);
+            }
+        }
+        return listMap;
+    }
+
+    public List<RoomDTO> getGameRoomList(Enumerations.GameRoomType type) {
+        List<RoomDTO> list = roomRepository.findByVisibleTrueAndGameRoomType(type)
+                                            .stream()
+                                            .map(room -> roomMapper.createRoomDTO(room))
+                                            .collect(Collectors.toList());
+
+        return list;
     }
 
     private Room joinedRoom(long roomId, Member member) {
