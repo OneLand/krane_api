@@ -61,7 +61,7 @@ public class GameRoomController {
             @ApiParam(value = "게임방 Type", required = true) @PathVariable(value = "room_type") String roomType) {
 
         Enumerations.GameRoomType type = Enumerations.GameRoomType.valueOf(roomType);
-        Map<String, List<RoomDTO>> lists = roomService.getGameRoomList(type);
+        List<RoomDTO> lists = roomService.getGameRoomList(type);
         return new StandardResponse(ResultCode.OK.getCode(), ResultCode.OK.name(), lists);
     }
 }
