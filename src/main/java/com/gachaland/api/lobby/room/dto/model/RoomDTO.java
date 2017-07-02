@@ -22,6 +22,8 @@ public class RoomDTO {
 
     private String gameModeName;
 
+    private String imageUrl;
+
     private Enumerations.GameRoomType gameRoomType;
 
     private boolean active;     // 게임방 활성 여부
@@ -35,5 +37,8 @@ public class RoomDTO {
     private String name;
 
     private String description; // client에 표기될 내용 (곰돌이 푸우 / size : 30 x 30 cm)
+
+    // TODO - 할당된 상품 추가
+    // private Item item;
 
 }

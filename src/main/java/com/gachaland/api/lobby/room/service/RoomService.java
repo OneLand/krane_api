@@ -2,20 +2,22 @@ package com.gachaland.api.lobby.room.service;
 
 
 import com.gachaland.api.common.Enumerations;
+import com.gachaland.api.lobby.room.controller.body.RoomUpdate;
 import com.gachaland.api.lobby.room.dao.model.Room;
 import com.gachaland.api.lobby.room.dao.repository.RoomRepository;
 import com.gachaland.api.lobby.room.dto.mapper.RoomMapper;
 import com.gachaland.api.lobby.room.dto.model.RoomDTO;
+import com.gachaland.api.lobby.room.dto.model.RoomListDTO;
 import com.gachaland.api.member.dao.model.Member;
 import com.gachaland.api.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +41,7 @@ public class RoomService {
         room.setName(roomDTO.getName());
         room.setGameMode(roomDTO.getGameMode());
         room.setGameModeName(roomDTO.getGameModeName());
+        room.setImageUrl(roomDTO.getImageUrl());
         room.setDescription(roomDTO.getDescription());
         room.setGameRoomType(roomDTO.getGameRoomType());
         room.setActive(false);
@@ -51,18 +54,42 @@ public class RoomService {
         return room;
     }
 
-    public Room adminRoomUpdate(long roomId, boolean active, boolean visible) {
+    public Room adminRoomUpdate(long roomId, RoomUpdate r) {
         Room room = roomRepository.findOne(roomId);
         if (room == null)
             return null;
 
-        room.setActive(active);
-        room.setVisible(visible);
-        roomRepository.save(room);
-        return room;
+        if (r.getActive() != null) {
+            room.setActive(r.getActive());
+        }
+
+        if (r.getVisible() != null) {
+            room.setVisible(r.getVisible());
+        }
+
+        if (StringUtils.isEmpty(r.getDescription())) {
+            room.setDescription(r.getDescription());
+        }
+
+        if (StringUtils.isEmpty(r.getImageUrl())) {
+            room.setImageUrl(r.getImageUrl());
+        }
+
+        return roomRepository.save(room);
     }
 
-    public Map<String, List<RoomDTO>> getGameRoomList() {
+    public List<RoomListDTO> getGameRoomList() {
+        List<RoomListDTO> list = new ArrayList<>();
+
+        Map<String, List<RoomDTO>> roomMap = getGameRoomMap();
+        for (String key : roomMap.keySet()) {
+            RoomListDTO roomListDTO = new RoomListDTO(key, roomMap.get(key));
+            list.add(roomListDTO);
+        }
+        return list;
+    }
+
+    public Map<String, List<RoomDTO>> getGameRoomMap() {
         Map<String, List<RoomDTO>> listMap = new HashMap<>();
         List<Room> rooms = roomRepository.findByVisibleTrue();
 

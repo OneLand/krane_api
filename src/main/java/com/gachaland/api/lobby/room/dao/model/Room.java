@@ -48,6 +48,8 @@ public class Room {
     @Column(length = 255)
     private String description; // client에 표기될 내용 (곰돌이 푸우 / size : 30 x 30 cm)
 
+    @Column(length = 255)
+    private String imageUrl;  // 게임방 이미지
 
     public int increaseJoiner() {
         this.joinerCount++;

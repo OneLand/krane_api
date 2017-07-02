@@ -15,6 +15,7 @@ public class RoomMapper {
         roomDTO.setRoomId(room.getId());
         roomDTO.setGameMode(room.getGameMode());
         roomDTO.setGameModeName(room.getGameModeName());
+        roomDTO.setImageUrl(room.getImageUrl());
         roomDTO.setGameRoomType(room.getGameRoomType());
         roomDTO.setName(room.getName());
         roomDTO.setDescription(room.getDescription());
