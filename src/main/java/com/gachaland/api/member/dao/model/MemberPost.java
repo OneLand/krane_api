@@ -26,6 +26,7 @@ public class MemberPost {
     @GeneratedValue
     private long id;
 
+    @Column(name = "member_id")
     private long memberId;
 
     @Column(length = 255)
