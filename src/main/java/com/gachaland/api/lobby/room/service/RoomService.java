@@ -67,11 +67,11 @@ public class RoomService {
             room.setVisible(r.getVisible());
         }
 
-        if (StringUtils.isEmpty(r.getDescription())) {
+        if (!StringUtils.isEmpty(r.getDescription())) {
             room.setDescription(r.getDescription());
         }
 
-        if (StringUtils.isEmpty(r.getImageUrl())) {
+        if (!StringUtils.isEmpty(r.getImageUrl())) {
             room.setImageUrl(r.getImageUrl());
         }
 
