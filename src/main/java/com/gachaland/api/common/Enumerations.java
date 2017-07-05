@@ -5,8 +5,20 @@ package com.gachaland.api.common;
  */
 public class Enumerations {
 
+    public enum OsType {
+        ANDROID, IOS
+    }
+
+    public enum TokenStatus {
+        VALID, INVALID
+    }
+
     public enum MemberType {
         GUEST, MEMBER, GOOGLE, FACEBOOK
+    }
+
+    public enum PhoneNumberType {
+        DEVICE, INPUT
     }
 
     public enum MemberStatus {
@@ -31,6 +43,7 @@ public class Enumerations {
 
     public enum MemberHistoryStatus{
         LOGIN,      // 접속
+        LOGIN_FAIL, // 접속 실패
         START,      // 게임시작
         PURCHASE,   // 구매
         EXCHANGE,   // 교환

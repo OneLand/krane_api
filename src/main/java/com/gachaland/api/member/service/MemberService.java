@@ -1,19 +1,26 @@
 package com.gachaland.api.member.service;
 
 import com.gachaland.api.common.Enumerations;
+import com.gachaland.api.common.model.UserSession;
 import com.gachaland.api.member.dao.model.Member;
 import com.gachaland.api.member.dao.model.MemberHistory;
+import com.gachaland.api.member.dao.model.MemberToken;
 import com.gachaland.api.member.dao.model.MemberWallet;
 import com.gachaland.api.member.dao.repository.MemberHistoryRepository;
 import com.gachaland.api.member.dao.repository.MemberRepository;
+import com.gachaland.api.member.dao.repository.MemberTokenRepository;
 import com.gachaland.api.member.dao.repository.MemberWalletRepository;
 import com.gachaland.api.member.dto.mapper.MemberMapper;
 import com.gachaland.api.member.dto.model.MemberDTO;
 import com.gachaland.api.member.dto.model.MemberHistoryDTO;
+import com.gachaland.api.member.dto.model.RegisterBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +34,9 @@ public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private MemberTokenRepository memberTokenRepository;
 
     @Autowired
     private MemberWalletRepository memberWalletRepository;
@@ -48,32 +58,131 @@ public class MemberService {
     }
 
     @Transactional
-    public long registerGuestMember(String memberType, String phoneNumber) {
-        Enumerations.MemberType mType = GUEST;
-        try {
-            mType = Enumerations.MemberType.valueOf(memberType);
-        } catch (Exception ex) {
-            mType = GUEST;
+    public MemberToken registerGuestMember(RegisterBody registerBody) {
+        if (registerBody == null) {
+            return null;
         }
 
         Member member = new Member();
-        try {
-            member.setPhoneNumber(phoneNumber);
-            member.setMemberType(mType);
+        member.setMemberType(GUEST);
+
+        if (!StringUtils.isEmpty(registerBody.getPhoneNumber())) {
+            member.setPhoneNumber(registerBody.getPhoneNumber());
+            if (registerBody.isDeviceNumber()) {
+                member.setMemberType(Enumerations.MemberType.MEMBER);
+            }
             member = memberRepository.save(member);
-
-            MemberWallet memberWallet = new MemberWallet();
-            memberWallet.setMemberId(member.getId());
-            memberWallet.setCoin(0);
-            memberWallet.setRuby(0);
-            memberWalletRepository.save(memberWallet);
-        }
-        catch (Exception ex) {
-            return 0;
         }
 
-        return member.getId();
+        MemberWallet memberWallet = new MemberWallet();
+        memberWallet.setMemberId(member.getId());
+        memberWallet.setCoin(0);
+        memberWallet.setRuby(0);
+        memberWalletRepository.save(memberWallet);
+
+        MemberToken memberToken = new MemberToken();
+        memberToken.setMemberId(member.getId());
+        memberToken.setDeviceId(registerBody.getAdid());
+        memberToken.setIssueDate(new Date());
+        memberToken.setOs(registerBody.getOsType());
+
+        String newToken = generateRefreshToken(member, registerBody.getAdid());
+        if (StringUtils.isEmpty(newToken)) {
+            memberToken.setStatus(Enumerations.TokenStatus.INVALID);
+        }
+        else {
+            memberToken.setStatus(Enumerations.TokenStatus.VALID);
+            memberToken.setToken(newToken);
+        }
+
+        memberTokenRepository.save(memberToken);
+        return memberToken;
     }
+
+    private String generateRefreshToken(Member member, String udid) {
+
+        String number = member.getPhoneNumber();
+        if (StringUtils.isEmpty(number)) {
+            number = "guest_number";
+        }
+
+        String pwd = String.format("%d-%s_%s:%s", member.getId(), number, udid, (new Date().toString()));
+        String token = null;
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(pwd.getBytes());
+
+            byte byteData[] = md.digest();
+
+            //convert the byte to hex format method 1
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < byteData.length; i++) {
+                sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            }
+
+            //convert the byte to hex format method 2
+            StringBuffer hexString = new StringBuffer();
+            for (int i = 0; i < byteData.length; i++) {
+                String hex = Integer.toHexString(0xff & byteData[i]);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            System.out.println("Digest(in hex format):: " + hexString.toString());
+            token = hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return token;
+    }
+
+    public boolean memberLogin(UserSession session, RegisterBody registerBody) {
+        if (session == null || session.isValid() == false)
+            return false;
+
+        MemberToken token = upsertMemberToken(session, registerBody);
+        session.setToken(token);
+
+        Enumerations.MemberHistoryStatus status = Enumerations.MemberHistoryStatus.LOGIN;
+        loggingMemberHistory(session.getMember(),
+                status,
+                Long.toString(session.getToken().getId()));
+
+        return true;
+    }
+
+    private MemberToken upsertMemberToken(UserSession session, RegisterBody registerBody) {
+
+        Date current = new Date();
+        boolean refresh = false;
+
+        MemberToken memberToken = session.getToken();
+        if (!memberToken.getDeviceId().equals(registerBody.getAdid())) {
+            memberToken.setDeviceId(registerBody.getAdid());
+            refresh = true;
+        }
+
+        long diffTm = current.getTime() - memberToken.getIssueDate().getTime();
+        // 12시간 지나면 토큰 갱신
+        if (diffTm > (1000 * 60 * 60 * 12)) {
+            refresh = true;
+
+            String newToken = generateRefreshToken(session.getMember(), registerBody.getAdid());
+            if (!StringUtils.isEmpty(newToken)) {
+                memberToken.setStatus(Enumerations.TokenStatus.VALID);
+                memberToken.setToken(newToken);
+            }
+        }
+
+        if (refresh) {
+            memberToken.setOs(registerBody.getOsType());
+
+            memberTokenRepository.save(memberToken);
+        }
+        return memberToken;
+    }
+
 
     public void loggingMemberHistory(long memberId, String status) {
         Member member = memberRepository.findOne(memberId);
@@ -84,15 +193,15 @@ public class MemberService {
             ex.printStackTrace();
         }
 
-        loggingMemberHistory(member, historyStatus);
+        loggingMemberHistory(member, historyStatus, "logging");
     }
 
-    private void loggingMemberHistory(Member member, Enumerations.MemberHistoryStatus status) {
+    private void loggingMemberHistory(Member member, Enumerations.MemberHistoryStatus status, String payload) {
         MemberHistory memberHistory = new MemberHistory();
         memberHistory.setIssueDate(new Date());
         memberHistory.setMemberHistoryStatus(status);
         memberHistory.setMemberId(member.getId());
-        memberHistory.setPayload("logging");
+        memberHistory.setPayload(payload);
 
         memberHistoryRepository.save(memberHistory);
     }

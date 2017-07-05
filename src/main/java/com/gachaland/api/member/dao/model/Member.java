@@ -24,6 +24,10 @@ public class Member {
     @Column(length = 15)
     private String phoneNumber; // 전화번호
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 64)
+    private Enumerations.PhoneNumberType phoneNumberType;
+
     @Column(length = 10)
     private String postNumber;  // 우편번호
 

@@ -1,7 +1,11 @@
 package com.gachaland.api.member.controller;
 
 import com.gachaland.api.common.api.StandardResponse;
+import com.gachaland.api.common.constants.Constants;
 import com.gachaland.api.common.constants.ResultCode;
+import com.gachaland.api.common.model.UserSession;
+import com.gachaland.api.member.dao.model.MemberToken;
+import com.gachaland.api.member.dto.model.LoginDTO;
 import com.gachaland.api.member.dto.model.MemberDTO;
 import com.gachaland.api.member.dto.model.RegisterBody;
 import com.gachaland.api.member.service.MemberService;
@@ -29,19 +33,30 @@ public class MemberController {
     @RequestMapping(method = RequestMethod.POST, value = "/register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public StandardResponse registerGuestMember(
             @ApiParam(name="body", value = "가입 정보 JSON", required = true) @RequestBody RegisterBody registerBody) {
-        long memberId = memberService.registerGuestMember(registerBody.getMemberType(), registerBody.getPhoneNumber());
 
-        log.info(">>>> register member_id {} ", memberId);
+        MemberToken memberToken = memberService.registerGuestMember(registerBody);
 
-        if (memberId == 0) {
-            return new StandardResponse(ResultCode.OK.getCode(), "FAIL");
+        if (memberToken == null) {
+            return new StandardResponse(ResultCode.UNAUTHORIZED);
         }
         else {
-            return new StandardResponse(ResultCode.OK.getCode(), "SUCCESS", memberId);
+            log.info(">>>> register member_id {} ", memberToken.getMemberId());
+            LoginDTO loginDTO = new LoginDTO(memberToken.getMemberId(), memberToken.getToken());
+            return new StandardResponse(ResultCode.OK, loginDTO);
         }
+    }
 
-//        MemberDTO member = memberService.getMemberInfo(memberId);
-//        return new StandardResponse(ResultCode.OK.getCode(), "SUCCESS", member);
+    @ApiOperation(value = "로그인 하기", notes = "로그인")
+    @RequestMapping(method = RequestMethod.POST, value = "/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public StandardResponse loginMember(@RequestAttribute(Constants.REQ_ATTR_USER) UserSession session,
+        @ApiParam(name="body", value = "가입 정보 JSON", required = true) @RequestBody RegisterBody registerBody) {
+
+        if (memberService.memberLogin(session, registerBody) == true) {
+            LoginDTO loginDTO = new LoginDTO(session.getMember().getId(), session.getToken().getToken());
+            return new StandardResponse(ResultCode.OK, loginDTO);
+        }
+        else
+            return new StandardResponse(ResultCode.UNAUTHORIZED);
     }
 
     @ApiOperation(value = "Member ID로 정보 조회", notes = "멤버 Id로 멤버 조회 ")

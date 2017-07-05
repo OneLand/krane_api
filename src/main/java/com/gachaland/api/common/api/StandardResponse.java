@@ -1,5 +1,6 @@
 package com.gachaland.api.common.api;
 
+import com.gachaland.api.common.constants.ResultCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,5 +21,15 @@ public class StandardResponse extends StandardHeader {
     public StandardResponse(int code, String message) {
         super(code, message);
         this.body = null;
+    }
+
+    public StandardResponse(ResultCode resultCode) {
+        super(resultCode.getCode(), resultCode.name());
+        this.body = null;
+    }
+
+    public StandardResponse(ResultCode resultCode, Object body) {
+        super(resultCode.getCode(), resultCode.name());
+        this.body = body;
     }
 }
