@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -20,7 +21,7 @@ import java.util.Date;
                    @Index(name="idx_member_id", columnList = "member_id", unique = true),
                    @Index(name="idx_device_id", columnList = "device_id", unique = true)
 })
-public class MemberToken {
+public class MemberToken implements Serializable {
 
     @Id
     @GeneratedValue

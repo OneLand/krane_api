@@ -10,6 +10,7 @@ import java.util.List;
  * Created by jhpark1220 on 2017. 7. 5..
  */
 public interface MemberTokenRepository extends JpaRepository<MemberToken, Long> {
+    MemberToken findTopByTokenOrderByIssueDateDesc(String token);
     List<MemberToken> findByToken(String token);
     List<MemberToken> findByTokenAndStatus(String token, Enumerations.TokenStatus status);
 

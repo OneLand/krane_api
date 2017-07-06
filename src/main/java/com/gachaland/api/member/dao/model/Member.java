@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor @NoArgsConstructor
 @Entity
 @Table(name="LandMember", indexes = {@Index(name="idx_member_phone", columnList = "phoneNumber", unique = true)})
-public class Member {
+public class Member implements Serializable {
 
     @Id
     @GeneratedValue
