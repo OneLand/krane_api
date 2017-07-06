@@ -49,7 +49,7 @@ public class MemberController {
     @ApiOperation(value = "로그인 하기", notes = "로그인")
     @RequestMapping(method = RequestMethod.POST, value = "/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public StandardResponse loginMember(@RequestAttribute(Constants.REQ_ATTR_USER) UserSession session,
-                                        @RequestAttribute(Constants.REQ_ATTR_DEBUG_USER_ID_HEADER) String debugId,
+                                        @RequestParam(Constants.REQ__DEBUG_USER_ID_PARAM) String debugId,
         @ApiParam(name="body", value = "가입 정보 JSON", required = true) @RequestBody RegisterBody registerBody) {
 
         if (memberService.memberLogin(session, registerBody) == true) {
