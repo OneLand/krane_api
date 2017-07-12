@@ -4,6 +4,7 @@ import com.gachaland.api.common.Enumerations;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor @NoArgsConstructor
 @Entity
+@ToString(exclude = {"couponList"})
 @Table(name="LandMember", indexes = {@Index(name="idx_member_phone", columnList = "phoneNumber", unique = true)})
 public class Member implements Serializable {
 

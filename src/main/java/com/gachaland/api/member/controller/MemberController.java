@@ -49,8 +49,14 @@ public class MemberController {
     @ApiOperation(value = "로그인 하기", notes = "로그인")
     @RequestMapping(method = RequestMethod.POST, value = "/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public StandardResponse loginMember(@RequestAttribute(Constants.REQ_ATTR_USER) UserSession session,
-                                        @RequestParam(Constants.REQ__DEBUG_USER_ID_PARAM) String debugId,
+                                        @RequestHeader(value=Constants.REQ__DEBUG_USER_ID_PARAM) String headerStr,
+                                        @RequestParam(value=Constants.REQ__DEBUG_USER_ID_PARAM, required = false) String debugId,
         @ApiParam(name="body", value = "가입 정보 JSON", required = true) @RequestBody RegisterBody registerBody) {
+
+        log.info("header > " + headerStr);
+        log.info("parameter > " + debugId);
+        log.info("session > " + session.toString());
+        log.info("body > " + registerBody.toString());
 
         if (memberService.memberLogin(session, registerBody) == true) {
             LoginDTO loginDTO = new LoginDTO(session.getMember().getId(), session.getToken().getToken());

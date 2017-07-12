@@ -3,7 +3,6 @@ package com.gachaland.api.common.exception;
 import com.gachaland.api.common.constants.ResultCode;
 import com.gachaland.api.common.model.ErrorHeader;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

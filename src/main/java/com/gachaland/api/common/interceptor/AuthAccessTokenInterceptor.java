@@ -6,8 +6,10 @@ import com.gachaland.api.common.exception.RuntimeExceptionBase;
 import com.gachaland.api.common.model.AuthCheckByAccessToken;
 import com.gachaland.api.common.model.UserSession;
 import com.gachaland.api.member.service.MemberTokenService;
+import lombok.extern.slf4j.Slf4j;
 import org.jboss.logging.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -18,6 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by jhpark1220 on 2017. 7. 6..
  */
+@Slf4j
+@Component
 public class AuthAccessTokenInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
@@ -36,7 +40,14 @@ public class AuthAccessTokenInterceptor extends HandlerInterceptorAdapter {
 //            return true;
 //        }
 
+
         String debugId = request.getParameter(Constants.REQ__DEBUG_USER_ID_PARAM);
+        log.info("request : {} ", request.toString());
+        log.info("DebugId : {} ", debugId);
+        if (memberTokenService == null) {
+            log.info("member token is null");
+        }
+
         if (debugId != null) {
             UserSession userSession = memberTokenService.checkMeDebug(debugId);
             request.setAttribute(Constants.REQ_ATTR_USER, userSession);
