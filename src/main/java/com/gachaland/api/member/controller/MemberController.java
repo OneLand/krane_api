@@ -3,6 +3,7 @@ package com.gachaland.api.member.controller;
 import com.gachaland.api.common.api.StandardResponse;
 import com.gachaland.api.common.constants.Constants;
 import com.gachaland.api.common.constants.ResultCode;
+import com.gachaland.api.common.model.AuthCheckByAccessToken;
 import com.gachaland.api.common.model.UserSession;
 import com.gachaland.api.member.dao.model.MemberToken;
 import com.gachaland.api.member.dto.model.LoginDTO;
@@ -47,12 +48,16 @@ public class MemberController {
     }
 
     @ApiOperation(value = "로그인 하기", notes = "로그인")
+    @AuthCheckByAccessToken
     @RequestMapping(method = RequestMethod.POST, value = "/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public StandardResponse loginMember(@RequestAttribute(Constants.REQ_ATTR_USER) UserSession session,
-                                        @RequestHeader(value=Constants.REQ_ATTR_USER_TOKEN) String userToken,
-                                        @RequestHeader(value=Constants.REQ_ATTR_USER_ID) String userId,
-                                        @RequestHeader(value=Constants.REQ__DEBUG_USER_ID_PARAM) String headerStr,
+    public StandardResponse loginMember(@RequestAttribute(value = Constants.REQ_ATTR_USER, required = false) UserSession session,
+                                        @RequestHeader(value=Constants.REQ_ATTR_USER_TOKEN, required = false) String userToken,
+                                        @RequestHeader(value=Constants.REQ_ATTR_USER_ID, required = false) String userId,
+                                        @RequestHeader(value=Constants.REQ__DEBUG_USER_ID_PARAM, required = false) String headerStr,
         @ApiParam(name="body", value = "가입 정보 JSON", required = true) @RequestBody RegisterBody registerBody) {
+
+        if (session == null)
+            return new StandardResponse(ResultCode.UNAUTHORIZED);
 
         log.info("header > " + headerStr);
         log.info("userToken > " + userToken);
