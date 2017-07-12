@@ -30,24 +30,8 @@ public class AuthAccessTokenInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-//        // for test
-//        String debugId = request.getHeader(Constants.REQ_ATTR_DEBUG_USER_ID_HEADER);
-//        if (debugId != null) {
-//            request.setAttribute(Constants.REQ_ATTR_DEBUG_USER_ID_HEADER, debugId);
-//            UserSession userSession = memberTokenService.checkMeDebug(debugId);
-//            request.setAttribute(Constants.REQ_ATTR_USER, userSession);
-//            MDC.put(Constants.MDC_REQUEST_ID, userSession);
-//            return true;
-//        }
-
-
+        // for test
         String debugId = request.getParameter(Constants.REQ__DEBUG_USER_ID_PARAM);
-        log.info("request : {} ", request.toString());
-        log.info("DebugId : {} ", debugId);
-        if (memberTokenService == null) {
-            log.info("member token is null");
-        }
-
         if (debugId != null) {
             UserSession userSession = memberTokenService.checkMeDebug(debugId);
             request.setAttribute(Constants.REQ_ATTR_USER, userSession);
