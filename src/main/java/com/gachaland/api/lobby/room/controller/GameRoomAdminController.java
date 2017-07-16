@@ -21,7 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/lobby/room")
-@Api(description = "게임방 정보", tags = "GameRoom Info")
+@Api(description = "[ADMIN]게임방 정보", tags = "ADMIN GameRoom Info")
 public class GameRoomAdminController {
 
     @Autowired

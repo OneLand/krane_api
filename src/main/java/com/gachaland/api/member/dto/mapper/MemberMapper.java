@@ -52,7 +52,7 @@ public class MemberMapper {
         List<MemberHistoryDTO.History> memberHistories = new ArrayList<>();
         for (MemberHistory history : historyList) {
             MemberHistoryDTO.History h = new MemberHistoryDTO.History();
-            h.setIssueDate(DateUtils.getFormattedString(history.getIssueDate()));
+            h.setIssueDate(DateUtils.getFormattedDateStr(history.getIssueDate()));
             h.setStatus(history.getMemberHistoryStatus());
             memberHistories.add(h);
         }

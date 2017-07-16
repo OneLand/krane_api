@@ -66,7 +66,7 @@ public class GameRoomController {
 
     @ApiOperation(value = "TODO - 게임방 Viewer", notes = "게임방 관전")
     @AuthCheckByAccessToken
-    @RequestMapping(method = RequestMethod.POST, value = "/join/{room_id}")
+    @RequestMapping(method = RequestMethod.POST, value = "/viewer/{room_id}")
     public StandardResponse viewerGameRoomById(
             @RequestAttribute(value = Constants.REQ_ATTR_USER, required = false) UserSession session,
             @ApiParam(value = "room_id", required = true) @PathVariable(value = "room_id") int roomId) {

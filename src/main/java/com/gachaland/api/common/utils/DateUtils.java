@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -48,6 +49,15 @@ public class DateUtils {
 
     public static long getTimestampOnTimezone(LocalDateTime localDateTime, String timezone) {
         return localDateTime.atZone(ZoneId.of(timezone)).toInstant().toEpochMilli();
+    }
+
+    public static String getFormattedDateStr(LocalDateTime localDateTime) {
+        return getFormattedDateStr(localDateTime, DEFAULT_DATE_FORMAT);
+    }
+
+    public static String getFormattedDateStr(LocalDateTime localDateTime, String format) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format);
+        return localDateTime.format(dateTimeFormatter);
     }
 
     /**
