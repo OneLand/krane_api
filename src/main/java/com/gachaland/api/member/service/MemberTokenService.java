@@ -58,6 +58,7 @@ public class MemberTokenService {
         UserSession session = new UserSession();
         session.setMember(member);
         session.setToken(tokens.get(0));
+        session.setValid(true);
         return session;
     }
 
