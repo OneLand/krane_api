@@ -30,7 +30,7 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @ApiOperation(value = "게스트 멤버 가입하기 (전화번호)", notes = "멤버 가입")
+    @ApiOperation(value = "01.멤버 가입하기 (전화번호)", notes = "멤버 가입")
     @RequestMapping(method = RequestMethod.POST, value = "/register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public StandardResponse registerGuestMember(
             @ApiParam(name="body", value = "가입 정보 JSON", required = true) @RequestBody RegisterBody registerBody) {
@@ -47,7 +47,7 @@ public class MemberController {
         }
     }
 
-    @ApiOperation(value = "로그인 하기", notes = "로그인")
+    @ApiOperation(value = "02.로그인 하기", notes = "로그인")
     @AuthCheckByAccessToken
     @RequestMapping(method = RequestMethod.POST, value = "/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public StandardResponse loginMember(@RequestAttribute(value = Constants.REQ_ATTR_USER, required = false) UserSession session,
@@ -73,14 +73,14 @@ public class MemberController {
             return new StandardResponse(ResultCode.UNAUTHORIZED);
     }
 
-    @ApiOperation(value = "Member ID로 정보 조회", notes = "멤버 Id로 멤버 조회 ")
+    @ApiOperation(value = "03.ADMIN.Member ID로 정보 조회", notes = "멤버 Id로 멤버 조회 ")
     @RequestMapping(method = RequestMethod.GET, value = "/{memberId}")
     public StandardResponse getMemberInfoById(@ApiParam(value = "memberId", required = true) @PathVariable long memberId) {
         MemberDTO member = memberService.getMemberInfo(memberId);
         return new StandardResponse(ResultCode.OK.getCode(), "SUCCESS", member);
     }
 
-    @ApiOperation(value = "전화번호로 멤버 정보 조회", notes = "전화번호로 멤버 조회 ")
+    @ApiOperation(value = "04.ADMIN.전화번호로 멤버 정보 조회", notes = "전화번호로 멤버 조회 ")
     @RequestMapping(method = RequestMethod.GET, value = "/phone")
     public StandardResponse getMemberInfoByPhoneNum(
         @ApiParam(name="num", required = true, value="0") @RequestParam(value = "num", required = true, defaultValue = "") String phoneNumber) {

@@ -2,6 +2,7 @@ package com.gachaland.api.lobby.room.service;
 
 
 import com.gachaland.api.common.Enumerations;
+import com.gachaland.api.common.model.UserSession;
 import com.gachaland.api.lobby.room.controller.body.RoomUpdate;
 import com.gachaland.api.lobby.room.dao.model.Room;
 import com.gachaland.api.lobby.room.dao.repository.RoomRepository;
@@ -116,7 +117,7 @@ public class RoomService {
         return list;
     }
 
-    private Room joinedRoom(long roomId, Member member) {
+    public RoomDTO joinedRoom(long roomId, UserSession session) {
         Room room = roomRepository.findOne(roomId);
         if (room == null)
             return null;
@@ -124,11 +125,11 @@ public class RoomService {
         room.increaseJoiner();
         roomRepository.save(room);
 
-        memberService.loggingMemberGameHistory(member, Enumerations.MemberHistoryStatus.ROOM_JOIN, roomId, "");
-        return room;
+        memberService.loggingMemberGameHistory(session.getMember(), Enumerations.MemberHistoryStatus.ROOM_JOIN, roomId, "");
+        return roomMapper.createRoomDTO(room);
     }
 
-    private Room exitRoom(long roomId, Member member) {
+    public RoomDTO exitRoom(long roomId, UserSession session) {
         Room room = roomRepository.findOne(roomId);
         if (room == null)
             return null;
@@ -136,11 +137,11 @@ public class RoomService {
         room.decreaseJoiner();
         roomRepository.save(room);
 
-        memberService.loggingMemberGameHistory(member, Enumerations.MemberHistoryStatus.ROOM_EXIT, roomId, "");
-        return room;
+        memberService.loggingMemberGameHistory(session.getMember(), Enumerations.MemberHistoryStatus.ROOM_EXIT, roomId, "");
+        return roomMapper.createRoomDTO(room);
     }
 
-    private Room viewerJoin(long roomId, Member member) {
+    public RoomDTO viewerJoin(long roomId, UserSession session) {
         Room room = roomRepository.findOne(roomId);
         if (room == null)
             return null;
@@ -148,10 +149,10 @@ public class RoomService {
         room.increaseViewer();
         roomRepository.save(room);
 
-        return room;
+        return roomMapper.createRoomDTO(room);
     }
 
-    private Room viewerExit(long roomId, Member member) {
+    public RoomDTO viewerExit(long roomId, UserSession session) {
         Room room = roomRepository.findOne(roomId);
         if (room == null)
             return null;
@@ -159,7 +160,7 @@ public class RoomService {
         room.decreaseViewer();
         roomRepository.save(room);
 
-        return room;
+        return roomMapper.createRoomDTO(room);
     }
 
 }

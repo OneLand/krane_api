@@ -32,7 +32,6 @@ public class AuthAccessTokenInterceptor extends HandlerInterceptorAdapter {
 
         // for test
         String debugId = request.getHeader(Constants.REQ__DEBUG_USER_ID_PARAM);
-//        String debugId = request.getParameter(Constants.REQ__DEBUG_USER_ID_PARAM);
         if (debugId != null) {
             UserSession userSession = memberTokenService.checkMeDebug(debugId);
             request.setAttribute(Constants.REQ_ATTR_USER, userSession);
