@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -44,6 +45,6 @@ public class MemberToken implements Serializable {
     @Column(name = "device_id", length = 255)
     private String deviceId;
 
-    private Date issueDate;
+    private LocalDateTime issueDate;
 
 }

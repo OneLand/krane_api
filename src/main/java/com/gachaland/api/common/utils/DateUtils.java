@@ -22,6 +22,7 @@ public class DateUtils {
 
     public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
     public static final String NON_MILISEC_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.0";
+    public static final String TIMEZONE_SEOUL = "Asia/Seoul";
     private static final Locale DEFAULT_LOCALE = Locale.KOREAN;
 
     /**
@@ -39,6 +40,14 @@ public class DateUtils {
         Date date = new Date(System.currentTimeMillis());
 
         return sdf.format(date);
+    }
+
+    public static long getTimestampOnTimezone(LocalDateTime localDateTime) {
+        return getTimestampOnTimezone(localDateTime, TIMEZONE_SEOUL);
+    }
+
+    public static long getTimestampOnTimezone(LocalDateTime localDateTime, String timezone) {
+        return localDateTime.atZone(ZoneId.of(timezone)).toInstant().toEpochMilli();
     }
 
     /**

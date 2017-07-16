@@ -28,7 +28,7 @@ public class MemberHistory {
     @Column(length = 64)
     private Enumerations.MemberHistoryStatus memberHistoryStatus;
 
-    private Date issueDate;
+    private LocalDateTime issueDate;
 
     private String payload;
 

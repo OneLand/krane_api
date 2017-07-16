@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -38,8 +39,12 @@ public class MemberPost {
     @Column(columnDefinition = "TEXT", nullable = true)
     private String contents;
 
-    private boolean checked;
+    private boolean reading = false;
 
-    private Date issueDt;
+    private boolean displayable = false;    // 유저 삭제 (DB에는 남겨둠)
+
+    private LocalDateTime issueDt;       // 발송 일
+
+    private LocalDateTime readDt;        // 읽은 날
 
 }

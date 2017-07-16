@@ -2,6 +2,7 @@ package com.gachaland.api.member.service;
 
 import com.gachaland.api.common.Enumerations;
 import com.gachaland.api.common.model.UserSession;
+import com.gachaland.api.common.utils.DateUtils;
 import com.gachaland.api.member.dao.model.Member;
 import com.gachaland.api.member.dao.model.MemberHistory;
 import com.gachaland.api.member.dao.model.MemberToken;
@@ -14,6 +15,7 @@ import com.gachaland.api.member.dto.mapper.MemberMapper;
 import com.gachaland.api.member.dto.model.MemberDTO;
 import com.gachaland.api.member.dto.model.MemberHistoryDTO;
 import com.gachaland.api.member.dto.model.RegisterBody;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ import org.springframework.util.StringUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -83,7 +86,7 @@ public class MemberService {
         MemberToken memberToken = new MemberToken();
         memberToken.setMemberId(member.getId());
         memberToken.setDeviceId(registerBody.getAdid());
-        memberToken.setIssueDate(new Date());
+        memberToken.setIssueDate(LocalDateTime.now());
         memberToken.setOs(registerBody.getOsType());
 
         String newToken = generateRefreshToken(member, registerBody.getAdid());
@@ -106,7 +109,7 @@ public class MemberService {
             number = "guest_number";
         }
 
-        String pwd = String.format("%d-%s_%s:%s", member.getId(), number, udid, (new Date().toString()));
+        String pwd = String.format("%d-%s_%s:%s", member.getId(), number, udid, LocalDateTime.now().toString());
         String token = null;
 
         try {
@@ -154,7 +157,7 @@ public class MemberService {
 
     private MemberToken upsertMemberToken(UserSession session, RegisterBody registerBody) {
 
-        Date current = new Date();
+        LocalDateTime current = LocalDateTime.now();
         boolean refresh = false;
 
         MemberToken memberToken = session.getToken();
@@ -163,7 +166,7 @@ public class MemberService {
             refresh = true;
         }
 
-        long diffTm = current.getTime() - memberToken.getIssueDate().getTime();
+        long diffTm = DateUtils.getTimestampOnTimezone(current) - DateUtils.getTimestampOnTimezone(memberToken.getIssueDate());
         // 12시간 지나면 토큰 갱신
         if (diffTm > (1000 * 60 * 60 * 12)) {
             refresh = true;
@@ -198,7 +201,7 @@ public class MemberService {
 
     private void loggingMemberHistory(Member member, Enumerations.MemberHistoryStatus status, String payload) {
         MemberHistory memberHistory = new MemberHistory();
-        memberHistory.setIssueDate(new Date());
+        memberHistory.setIssueDate(LocalDateTime.now());
         memberHistory.setMemberHistoryStatus(status);
         memberHistory.setMemberId(member.getId());
         memberHistory.setPayload(payload);
@@ -208,7 +211,7 @@ public class MemberService {
 
     public void loggingMemberGameHistory(Member member, Enumerations.MemberHistoryStatus status, long roomId, String payload) {
         MemberHistory memberHistory = new MemberHistory();
-        memberHistory.setIssueDate(new Date());
+        memberHistory.setIssueDate(LocalDateTime.now());
         memberHistory.setMemberHistoryStatus(status);
         memberHistory.setMemberId(member.getId());
         memberHistory.setPayload(payload);
