@@ -7,6 +7,8 @@ import com.gachaland.api.common.exception.GameRoomException;
 import com.gachaland.api.common.model.UserSession;
 import com.gachaland.api.lobby.room.controller.body.RoomUpdate;
 import com.gachaland.api.lobby.room.dao.model.Room;
+import com.gachaland.api.lobby.room.dao.model.RoomMembers;
+import com.gachaland.api.lobby.room.dao.repository.RoomMembersRepository;
 import com.gachaland.api.lobby.room.dao.repository.RoomRepository;
 import com.gachaland.api.lobby.room.dto.mapper.RoomMapper;
 import com.gachaland.api.lobby.room.dto.model.RoomDTO;
@@ -32,6 +34,9 @@ public class RoomService {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private RoomMemberService roomMemberService;
 
     @Autowired
     private MemberService memberService;
@@ -127,8 +132,8 @@ public class RoomService {
             throw new GameRoomException(ResultCode.ROOM_NOT_EXIST, "게임방이 존재하지 않습니다.");
 
         // TODO - 방에 조인된 여부를 cache에 저장해야 함. 지금은 그냥 DB로..
-        // if (already joined)
-        //    throw new GameRoomException(ResultCode.ROOM_ALREADY_JOINED, "이미 게임방에 접속되어 있습니다.");
+        if (roomMemberService.isJoined(room.getId(), session.getMember().getId()))
+            throw new GameRoomException(ResultCode.ROOM_ALREADY_JOINED, "이미 게임방에 접속되어 있습니다.");
 
         if (room.isExceededUserCount()) {
             throw new GameRoomException(ResultCode.ROOM_USER_EXCEEDED, "게임방 입장 정원 초과입니다.");
@@ -148,15 +153,28 @@ public class RoomService {
             throw new GameRoomException(ResultCode.ROOM_NOT_EXIST, "게임방이 존재하지 않습니다.");
 
         // TODO - 방에 조인된 여부를 cache에 저장해야 함. 지금은 그냥 DB로..
-        // if (already not joined)
-        //    throw new GameRoomException(ResultCode.ROOM_NOT_JOINED, "현재 게임방에 있지 않습니다.");
+        RoomMembers roomMembers = roomMemberService.getRoomMemberStatus(roomId, session.getMember().getId());
+        if (roomMembers == null) {
+            throw new GameRoomException(ResultCode.ROOM_NOT_JOINED, "현재 게임방에 있지 않습니다.");
+        }
 
-        // if (user is joiner)
-            room.decreaseJoiner();
-        // else (user is viewer)
-        //    room.decreaseViewer();
+        switch (roomMembers.getJoinType()) {
+            case JOIN:
+            {
+                room.decreaseJoiner();
+                break;
+            }
+            case VIEW:
+            {
+                room.decreaseViewer();
+                break;
+            }
+            case EXIT:
+            default:
+                throw new GameRoomException(ResultCode.ROOM_NOT_JOINED, "현재 게임방에 있지 않습니다.");
+        }
+
         roomRepository.save(room);
-
         memberService.loggingMemberGameHistory(session.getMember(), Enumerations.MemberHistoryStatus.ROOM_EXIT, roomId, "");
         return roomMapper.createRoomDTO(room);
     }
@@ -168,8 +186,8 @@ public class RoomService {
             throw new GameRoomException(ResultCode.ROOM_NOT_EXIST, "게임방이 존재하지 않습니다.");
 
         // TODO - 방에 조인된 여부를 cache에 저장해야 함. 지금은 그냥 DB로..
-        // if (already joined)
-        //    throw new GameRoomException(ResultCode.ROOM_ALREADY_JOINED, "이미 게임방에 접속되어 있습니다.");
+        if (roomMemberService.isViewer(room.getId(), session.getMember().getId()))
+            throw new GameRoomException(ResultCode.ROOM_ALREADY_JOINED, "이미 게임방에 접속되어 있습니다.");
 
         if (room.isExceededUserCount()) {
             throw new GameRoomException(ResultCode.ROOM_USER_EXCEEDED, "게임방 입장 정원 초과입니다.");
@@ -181,16 +199,16 @@ public class RoomService {
         return roomMapper.createRoomDTO(room);
     }
 
-    @Transactional
-    public RoomDTO viewerExit(long roomId, UserSession session) {
-        Room room = roomRepository.findOne(roomId);
-        if (room == null)
-            return null;
-
-        room.decreaseViewer();
-        roomRepository.save(room);
-
-        return roomMapper.createRoomDTO(room);
-    }
+//    @Transactional
+//    public RoomDTO viewerExit(long roomId, UserSession session) {
+//        Room room = roomRepository.findOne(roomId);
+//        if (room == null)
+//            return null;
+//
+//        room.decreaseViewer();
+//        roomRepository.save(room);
+//
+//        return roomMapper.createRoomDTO(room);
+//    }
 
 }

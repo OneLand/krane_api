@@ -65,4 +65,10 @@ public class Enumerations {
         STACK,
     }
 
+    public enum RoomJoinType {
+        JOIN,         // 참여
+        VIEW,         // 관전
+        EXIT,         // 퇴장
+    }
+
 }
