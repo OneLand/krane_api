@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "LandRoomMembers")
+@IdClass(RoomKey.class)
 public class RoomMembers {
 
     @Id
