@@ -22,8 +22,8 @@ public class RegisterBody {
     @JsonProperty("udid")
     private String adid;
 
-    // TODO
-    @JsonProperty("token")
-    private String token;
+//    // TODO
+//    @JsonProperty("token")
+//    private String token;
 
 }

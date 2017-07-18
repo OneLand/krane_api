@@ -60,6 +60,10 @@ public class MemberService {
         return memberMapper.mappingMemberDTO(member);
     }
 
+    public MemberDTO convertMemberDTO(Member member) {
+        return memberMapper.mappingMemberDTO(member);
+    }
+
     @Transactional
     public MemberToken registerGuestMember(RegisterBody registerBody) {
         if (registerBody == null) {

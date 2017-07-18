@@ -3,6 +3,7 @@ package com.gachaland.api.member.controller;
 import com.gachaland.api.common.api.StandardResponse;
 import com.gachaland.api.common.constants.Constants;
 import com.gachaland.api.common.constants.ResultCode;
+import com.gachaland.api.common.exception.AuthenticationException;
 import com.gachaland.api.common.model.AuthCheckByAccessToken;
 import com.gachaland.api.common.model.UserSession;
 import com.gachaland.api.member.dao.model.MemberToken;
@@ -38,11 +39,12 @@ public class MemberController {
         MemberToken memberToken = memberService.registerGuestMember(registerBody);
 
         if (memberToken == null) {
-            return new StandardResponse(ResultCode.UNAUTHORIZED);
+            throw new AuthenticationException(ResultCode.UNAUTHORIZED, "invalid member token");
         }
         else {
             log.info(">>>> register member_id {} ", memberToken.getMemberId());
-            LoginDTO loginDTO = new LoginDTO(memberToken.getMemberId(), memberToken.getToken());
+            MemberDTO member = memberService.getMemberInfo(memberToken.getMemberId());
+            LoginDTO loginDTO = new LoginDTO(memberToken.getMemberId(), memberToken.getToken(), member);
             return new StandardResponse(ResultCode.OK, loginDTO);
         }
     }
@@ -57,7 +59,7 @@ public class MemberController {
         @ApiParam(name="body", value = "가입 정보 JSON", required = true) @RequestBody RegisterBody registerBody) {
 
         if (session == null)
-            return new StandardResponse(ResultCode.UNAUTHORIZED);
+            throw new AuthenticationException(ResultCode.UNAUTHORIZED, "invalid session info");
 
         log.info("header > " + headerStr);
         log.info("userToken > " + userToken);
@@ -66,7 +68,8 @@ public class MemberController {
         log.info("body > " + registerBody.toString());
 
         if (memberService.memberLogin(session, registerBody) == true) {
-            LoginDTO loginDTO = new LoginDTO(session.getMember().getId(), session.getToken().getToken());
+            MemberDTO member = memberService.convertMemberDTO(session.getMember());
+            LoginDTO loginDTO = new LoginDTO(session.getMember().getId(), session.getToken().getToken(), member);
             return new StandardResponse(ResultCode.OK, loginDTO);
         }
         else

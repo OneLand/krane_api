@@ -9,6 +9,7 @@ import com.gachaland.api.member.dto.model.CouponDTO;
 import com.gachaland.api.member.dto.model.MemberDTO;
 import com.gachaland.api.member.dto.model.MemberHistoryDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,6 +39,9 @@ public class MemberMapper {
     }
 
     private List<CouponDTO> mappingCouponDTO(List<MemberCoupon> coupons) {
+        if (CollectionUtils.isEmpty(coupons))
+            return null;
+
         List<CouponDTO> couponDTOs = new ArrayList<>();
         for (MemberCoupon coupon : coupons) {
             CouponDTO couponDTO = new CouponDTO() ;

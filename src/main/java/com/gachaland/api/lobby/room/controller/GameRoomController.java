@@ -34,7 +34,9 @@ public class GameRoomController {
     @AuthCheckByAccessToken
     @RequestMapping(method = RequestMethod.GET, value = "")
     public StandardResponse getGameRooms(
-            @RequestAttribute(value = Constants.REQ_ATTR_USER, required = false) UserSession session) {
+            @RequestAttribute(value = Constants.REQ_ATTR_USER, required = false) UserSession session,
+            @RequestHeader(value=Constants.REQ_ATTR_USER_TOKEN, required = false) String userToken,
+            @RequestHeader(value=Constants.REQ_ATTR_USER_ID, required = false) String userId ) {
 
         List<RoomListDTO> list = roomService.getGameRoomList();
         return new StandardResponse(ResultCode.OK.getCode(), ResultCode.OK.name(), list);
@@ -45,6 +47,8 @@ public class GameRoomController {
     @RequestMapping(method = RequestMethod.GET, value = "/{game_mode}")
     public StandardResponse getGameRoomsByMode(
             @RequestAttribute(value = Constants.REQ_ATTR_USER, required = false) UserSession session,
+            @RequestHeader(value=Constants.REQ_ATTR_USER_TOKEN, required = false) String userToken,
+            @RequestHeader(value=Constants.REQ_ATTR_USER_ID, required = false) String userId,
             @ApiParam(value = "게임Mode", required = true) @PathVariable(value = "game_mode") String gameMode) {
 
 //        Enumerations.GameMode mode = Enumerations.GameMode.valueOf(gameMode);
@@ -57,6 +61,8 @@ public class GameRoomController {
     @RequestMapping(method = RequestMethod.POST, value = "/join/{room_id}")
     public StandardResponse joinGameRoomById(
             @RequestAttribute(value = Constants.REQ_ATTR_USER, required = false) UserSession session,
+            @RequestHeader(value=Constants.REQ_ATTR_USER_TOKEN, required = false) String userToken,
+            @RequestHeader(value=Constants.REQ_ATTR_USER_ID, required = false) String userId,
             @ApiParam(value = "room_id", required = true) @PathVariable(value = "room_id") int roomId) {
 
         // TODO - join room by room id
@@ -69,6 +75,8 @@ public class GameRoomController {
     @RequestMapping(method = RequestMethod.POST, value = "/viewer/{room_id}")
     public StandardResponse viewerGameRoomById(
             @RequestAttribute(value = Constants.REQ_ATTR_USER, required = false) UserSession session,
+            @RequestHeader(value=Constants.REQ_ATTR_USER_TOKEN, required = false) String userToken,
+            @RequestHeader(value=Constants.REQ_ATTR_USER_ID, required = false) String userId,
             @ApiParam(value = "room_id", required = true) @PathVariable(value = "room_id") int roomId) {
 
         // TODO - viewer room by room id
@@ -81,6 +89,8 @@ public class GameRoomController {
     @RequestMapping(method = RequestMethod.POST, value = "/exit/{room_id}")
     public StandardResponse exitGameRoomById(
             @RequestAttribute(value = Constants.REQ_ATTR_USER, required = false) UserSession session,
+            @RequestHeader(value=Constants.REQ_ATTR_USER_TOKEN, required = false) String userToken,
+            @RequestHeader(value=Constants.REQ_ATTR_USER_ID, required = false) String userId,
             @ApiParam(value = "room_id", required = true) @PathVariable(value = "room_id") int roomId) {
 
         // TODO - exit room by room id

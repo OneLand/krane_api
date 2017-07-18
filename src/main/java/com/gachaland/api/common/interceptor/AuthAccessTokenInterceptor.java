@@ -2,6 +2,7 @@ package com.gachaland.api.common.interceptor;
 
 import com.gachaland.api.common.constants.Constants;
 import com.gachaland.api.common.constants.ResultCode;
+import com.gachaland.api.common.exception.AuthenticationException;
 import com.gachaland.api.common.exception.RuntimeExceptionBase;
 import com.gachaland.api.common.model.AuthCheckByAccessToken;
 import com.gachaland.api.common.model.UserSession;
@@ -44,15 +45,15 @@ public class AuthAccessTokenInterceptor extends HandlerInterceptorAdapter {
         if (authCheck != null) {
             String accessToken = request.getHeader(Constants.REQ_ATTR_USER_TOKEN);
             if (StringUtils.isEmpty(accessToken))
-                throw new RuntimeExceptionBase(ResultCode.UNAUTHORIZED, "사용자 토큰이 없습니다.");
+                throw new AuthenticationException(ResultCode.UNAUTHORIZED, "사용자 토큰이 없습니다.");
 
             String memberId = request.getHeader(Constants.REQ_ATTR_USER_ID);
             if (StringUtils.isEmpty(memberId))
-                throw new RuntimeExceptionBase(ResultCode.UNAUTHORIZED, "사용자 토큰이 없습니다.");
+                throw new AuthenticationException(ResultCode.UNAUTHORIZED, "사용자 토큰이 없습니다.");
 
             UserSession userSession = memberTokenService.checkMe(accessToken, memberId);
             if (userSession == null || userSession.getMember() == null || userSession.getToken() == null) {
-                throw new RuntimeExceptionBase(ResultCode.UNAUTHORIZED, "사용자 토큰이 없습니다.");
+                throw new AuthenticationException(ResultCode.UNAUTHORIZED, "사용자 토큰이 없습니다.");
             }
 
             request.setAttribute(Constants.REQ_ATTR_USER, userSession);

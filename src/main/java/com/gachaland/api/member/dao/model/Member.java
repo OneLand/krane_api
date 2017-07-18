@@ -45,7 +45,7 @@ public class Member implements Serializable {
     @JoinColumn(name="id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private MemberWallet memberWallet;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name="memberId", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private List<MemberCoupon> couponList;
 

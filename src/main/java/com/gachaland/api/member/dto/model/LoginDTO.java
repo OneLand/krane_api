@@ -13,6 +13,9 @@ import lombok.NoArgsConstructor;
 public class LoginDTO {
 
     private long memberId;
+
     private String accessToken;
+
+    private MemberDTO member;
 
 }
