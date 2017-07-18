@@ -92,4 +92,10 @@ public class MemberController {
         return new StandardResponse(ResultCode.OK.getCode(), "SUCCESS", member);
     }
 
+    @ApiOperation(value = "05.DEBUG.MemberToken List", notes = "MemberTokenList")
+    @RequestMapping(method = RequestMethod.GET, value = "/tokens")
+    public StandardResponse getMemberTokens() {
+        return new StandardResponse(ResultCode.OK.getCode(), "SUCCESS", memberService.getTokenList());
+    }
+
 }

@@ -5,6 +5,7 @@ import com.gachaland.api.member.dao.model.Member;
 import com.gachaland.api.member.dao.model.MemberToken;
 import com.gachaland.api.member.dao.repository.MemberRepository;
 import com.gachaland.api.member.dao.repository.MemberTokenRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 @Service
 @Primary
+@Slf4j
 public class MemberTokenService {
 
     @Autowired
@@ -32,8 +34,12 @@ public class MemberTokenService {
     public UserSession checkMe(String userToken, String memberIdStr) {
         long memberId = Long.parseLong(memberIdStr);
 
+        log.info("casting memberId : {} ", memberId);
+
         Member member = memberRepository.findOne(memberId);
         MemberToken token = memberTokenRepository.findTopByTokenOrderByIssueDateDesc(userToken);
+
+        log.info("query token : {} / {}", userToken, token.toString());
 
         if (member == null || token == null)
             return null;

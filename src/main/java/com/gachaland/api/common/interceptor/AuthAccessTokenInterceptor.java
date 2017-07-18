@@ -44,16 +44,19 @@ public class AuthAccessTokenInterceptor extends HandlerInterceptorAdapter {
         AuthCheckByAccessToken authCheck = handlerMethod.getMethodAnnotation(AuthCheckByAccessToken.class);
         if (authCheck != null) {
             String accessToken = request.getHeader(Constants.REQ_ATTR_USER_TOKEN);
+            log.info("incoming accessToken: {}", accessToken);
             if (StringUtils.isEmpty(accessToken))
                 throw new AuthenticationException(ResultCode.UNAUTHORIZED, "사용자 토큰이 없습니다.");
 
             String memberId = request.getHeader(Constants.REQ_ATTR_USER_ID);
+            log.info("incoming memberId: {}", memberId);
             if (StringUtils.isEmpty(memberId))
-                throw new AuthenticationException(ResultCode.UNAUTHORIZED, "사용자 토큰이 없습니다.");
+                throw new AuthenticationException(ResultCode.UNAUTHORIZED, "사용자 ID가 없습니다.");
 
             UserSession userSession = memberTokenService.checkMe(accessToken, memberId);
+            log.info("not exist userSession ---- {}", accessToken );
             if (userSession == null || userSession.getMember() == null || userSession.getToken() == null) {
-                throw new AuthenticationException(ResultCode.UNAUTHORIZED, "사용자 토큰이 없습니다.");
+                throw new AuthenticationException(ResultCode.UNAUTHORIZED, "사용자 정보가 없습니다.");
             }
 
             request.setAttribute(Constants.REQ_ATTR_USER, userSession);

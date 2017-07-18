@@ -15,7 +15,6 @@ import com.gachaland.api.member.dto.mapper.MemberMapper;
 import com.gachaland.api.member.dto.model.MemberDTO;
 import com.gachaland.api.member.dto.model.MemberHistoryDTO;
 import com.gachaland.api.member.dto.model.RegisterBody;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +23,6 @@ import org.springframework.util.StringUtils;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import static com.gachaland.api.common.Enumerations.MemberType.GUEST;
@@ -62,6 +60,10 @@ public class MemberService {
 
     public MemberDTO convertMemberDTO(Member member) {
         return memberMapper.mappingMemberDTO(member);
+    }
+
+    public List<MemberToken> getTokenList() {
+        return memberTokenRepository.findAll();
     }
 
     @Transactional
