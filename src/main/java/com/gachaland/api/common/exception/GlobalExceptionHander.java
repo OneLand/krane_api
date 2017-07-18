@@ -39,6 +39,16 @@ public class GlobalExceptionHander {
         return errorHeader;
     }
 
+    @ExceptionHandler(GameRoomException.class)
+    @ResponseBody
+    public ErrorHeader handleError(HttpServletRequest req, HttpServletResponse res, GameRoomException gameRoomException) {
+        ErrorHeader errorHeader = new ErrorHeader(gameRoomException.getErrorCode().getCode(), gameRoomException.getMessage());
+        errorLog(req, gameRoomException);
+        res.setStatus(ResultCode.OK.getCode());
+
+        return errorHeader;
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MissingServletRequestParameterException.class, MethodArgumentTypeMismatchException.class})
     @ResponseBody

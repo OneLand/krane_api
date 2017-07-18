@@ -2,6 +2,8 @@ package com.gachaland.api.lobby.room.service;
 
 
 import com.gachaland.api.common.Enumerations;
+import com.gachaland.api.common.constants.ResultCode;
+import com.gachaland.api.common.exception.GameRoomException;
 import com.gachaland.api.common.model.UserSession;
 import com.gachaland.api.lobby.room.controller.body.RoomUpdate;
 import com.gachaland.api.lobby.room.dao.model.Room;
@@ -13,6 +15,7 @@ import com.gachaland.api.member.dao.model.Member;
 import com.gachaland.api.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -117,10 +120,19 @@ public class RoomService {
         return list;
     }
 
+    @Transactional
     public RoomDTO joinedRoom(long roomId, UserSession session) {
         Room room = roomRepository.findOne(roomId);
         if (room == null)
-            return null;
+            throw new GameRoomException(ResultCode.ROOM_NOT_EXIST, "게임방이 존재하지 않습니다.");
+
+        // TODO - 방에 조인된 여부를 cache에 저장해야 함. 지금은 그냥 DB로..
+        // if (already joined)
+        //    throw new GameRoomException(ResultCode.ROOM_ALREADY_JOINED, "이미 게임방에 접속되어 있습니다.");
+
+        if (room.isExceededUserCount()) {
+            throw new GameRoomException(ResultCode.ROOM_USER_EXCEEDED, "게임방 입장 정원 초과입니다.");
+        }
 
         room.increaseJoiner();
         roomRepository.save(room);
@@ -129,22 +141,39 @@ public class RoomService {
         return roomMapper.createRoomDTO(room);
     }
 
+    @Transactional
     public RoomDTO exitRoom(long roomId, UserSession session) {
         Room room = roomRepository.findOne(roomId);
         if (room == null)
-            return null;
+            throw new GameRoomException(ResultCode.ROOM_NOT_EXIST, "게임방이 존재하지 않습니다.");
 
-        room.decreaseJoiner();
+        // TODO - 방에 조인된 여부를 cache에 저장해야 함. 지금은 그냥 DB로..
+        // if (already not joined)
+        //    throw new GameRoomException(ResultCode.ROOM_NOT_JOINED, "현재 게임방에 있지 않습니다.");
+
+        // if (user is joiner)
+            room.decreaseJoiner();
+        // else (user is viewer)
+        //    room.decreaseViewer();
         roomRepository.save(room);
 
         memberService.loggingMemberGameHistory(session.getMember(), Enumerations.MemberHistoryStatus.ROOM_EXIT, roomId, "");
         return roomMapper.createRoomDTO(room);
     }
 
+    @Transactional
     public RoomDTO viewerJoin(long roomId, UserSession session) {
         Room room = roomRepository.findOne(roomId);
         if (room == null)
-            return null;
+            throw new GameRoomException(ResultCode.ROOM_NOT_EXIST, "게임방이 존재하지 않습니다.");
+
+        // TODO - 방에 조인된 여부를 cache에 저장해야 함. 지금은 그냥 DB로..
+        // if (already joined)
+        //    throw new GameRoomException(ResultCode.ROOM_ALREADY_JOINED, "이미 게임방에 접속되어 있습니다.");
+
+        if (room.isExceededUserCount()) {
+            throw new GameRoomException(ResultCode.ROOM_USER_EXCEEDED, "게임방 입장 정원 초과입니다.");
+        }
 
         room.increaseViewer();
         roomRepository.save(room);
@@ -152,6 +181,7 @@ public class RoomService {
         return roomMapper.createRoomDTO(room);
     }
 
+    @Transactional
     public RoomDTO viewerExit(long roomId, UserSession session) {
         Room room = roomRepository.findOne(roomId);
         if (room == null)

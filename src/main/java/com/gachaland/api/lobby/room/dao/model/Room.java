@@ -70,4 +70,15 @@ public class Room {
         this.viewerCount--;
         return this.viewerCount;
     }
+
+    public int getCurrentUserCount() {
+        return this.joinerCount + this.viewerCount;
+    }
+
+    public boolean isExceededUserCount() {
+        if (getCurrentUserCount() >= this.limitUserCount)
+            return true;
+        else
+            return false;
+    }
 }
