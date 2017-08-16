@@ -1,8 +1,5 @@
 package com.gachaland.api.config;
 
-/**
- * Created by chris.j3 on 2017. 5. 26..
- */
 public class RestClientFactory {
 
 //    public static RestTemplate createTemplate() {

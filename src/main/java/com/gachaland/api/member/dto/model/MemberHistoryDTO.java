@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Created by chris.j3 on 2017. 6. 20..
  */
 @Data
 public class MemberHistoryDTO implements Serializable {

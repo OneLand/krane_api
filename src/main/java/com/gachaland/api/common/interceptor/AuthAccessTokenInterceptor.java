@@ -18,9 +18,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Created by jhpark1220 on 2017. 7. 6..
- */
 @Slf4j
 @Component
 public class AuthAccessTokenInterceptor extends HandlerInterceptorAdapter {

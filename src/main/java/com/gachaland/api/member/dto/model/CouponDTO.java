@@ -5,7 +5,6 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * Created by chris.j3 on 2017. 6. 20..
  */
 @Data
 public class CouponDTO implements Serializable {

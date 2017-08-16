@@ -5,7 +5,6 @@ import com.gachaland.api.common.Enumerations;
 import lombok.Data;
 
 /**
- * Created by chris.j3 on 2017. 6. 21..
  */
 @Data
 public class RegisterBody {

@@ -4,9 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-/**
- * Created by chris.j3 on 2017. 6. 7..
- */
 @Data
 @Entity
 @Table(name = "LandMemberCoupon",

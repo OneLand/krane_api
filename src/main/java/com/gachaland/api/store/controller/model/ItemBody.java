@@ -3,9 +3,6 @@ package com.gachaland.api.store.controller.model;
 import com.gachaland.api.common.Enumerations;
 import lombok.Data;
 
-/**
- * Created by jhpark1220 on 2017. 6. 9..
- */
 @Data
 public class ItemBody {
 

@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Created by jhpark1220 on 2017. 6. 9..
- */
 @RestController
 @RequestMapping("/store")
 @Api(description = "상품 정보", tags = "Store Info")

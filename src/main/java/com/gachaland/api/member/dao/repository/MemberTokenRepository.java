@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 /**
- * Created by jhpark1220 on 2017. 7. 5..
  */
 public interface MemberTokenRepository extends JpaRepository<MemberToken, Long> {
     MemberToken findTopByTokenOrderByIssueDateDesc(String token);

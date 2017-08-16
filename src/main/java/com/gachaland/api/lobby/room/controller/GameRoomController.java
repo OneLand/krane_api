@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Created by jhpark1220 on 2017. 6. 30..
- */
 @RestController
 @RequestMapping("/lobby/room")
 @Api(description = "게임방 정보", tags = "GameRoom Info")

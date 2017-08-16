@@ -13,9 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Created by jhpark1220 on 2017. 7. 6..
- */
 @Service
 @Primary
 @Slf4j

@@ -19,9 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Created by jhpark1220 on 2017. 6. 7..
- */
 @Slf4j
 @RestController
 @RequestMapping("/member")

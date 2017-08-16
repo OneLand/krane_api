@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 /**
- * Created by chris.j3 on 2017. 6. 7..
  */
 public interface StoreRepository extends JpaRepository<StoreItem, Long> {
     List<StoreItem> findByEnable(boolean enable);

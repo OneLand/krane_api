@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
- * Created by jhpark1220 on 2017. 7. 2..
  */
 @Data
 @NoArgsConstructor

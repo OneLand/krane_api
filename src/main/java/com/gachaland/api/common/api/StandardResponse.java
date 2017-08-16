@@ -5,9 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-/**
- * Created by jhpark1220 on 2017. 6. 22..
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)

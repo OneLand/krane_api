@@ -6,9 +6,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * Created by jhpark1220 on 2017. 7. 5..
- */
 @Data
 public class UserSession implements Serializable {
 

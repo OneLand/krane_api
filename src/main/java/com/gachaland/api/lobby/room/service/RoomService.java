@@ -26,9 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Created by jhpark1220 on 2017. 6. 30..
- */
 @Service
 public class RoomService {
 

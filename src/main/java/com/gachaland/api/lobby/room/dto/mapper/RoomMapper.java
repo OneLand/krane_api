@@ -4,9 +4,6 @@ import com.gachaland.api.lobby.room.dao.model.Room;
 import com.gachaland.api.lobby.room.dto.model.RoomDTO;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by jhpark1220 on 2017. 7. 1..
- */
 @Service
 public class RoomMapper {
 

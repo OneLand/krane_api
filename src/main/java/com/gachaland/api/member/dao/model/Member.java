@@ -10,9 +10,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by jhpark1220 on 2017. 6. 7..
- */
 @Data
 @AllArgsConstructor @NoArgsConstructor
 @Entity

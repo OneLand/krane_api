@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Created by chris.j3 on 2017. 5. 26..
  */
 @RestController
 @RequestMapping("/control")

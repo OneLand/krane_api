@@ -10,9 +10,6 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Created by chris.j3 on 2017. 6. 13..
- */
 @RestController
 @RequestMapping("/logging")
 @Api(description = "멤버 History 정보", tags = "Logging")

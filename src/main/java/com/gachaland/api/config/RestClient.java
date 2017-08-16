@@ -9,9 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-/**
- * Created by chris.j3 on 2017. 5. 24..
- */
 @Component
 @Slf4j
 public class RestClient {

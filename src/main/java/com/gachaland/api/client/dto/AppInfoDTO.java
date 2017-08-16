@@ -8,9 +8,6 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by chris.j3 on 2017. 6. 13..
- */
 @Data
 @NoArgsConstructor @AllArgsConstructor
 public class AppInfoDTO implements Serializable {

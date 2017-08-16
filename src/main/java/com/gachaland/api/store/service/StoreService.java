@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by jhpark1220 on 2017. 6. 9..
- */
 @Service
 public class StoreService {
 

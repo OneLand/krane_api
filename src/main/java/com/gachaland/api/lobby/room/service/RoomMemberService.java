@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-/**
- * Created by jhpark1220 on 2017. 7. 19..
- */
 @Slf4j
 @Service
 public class RoomMemberService {

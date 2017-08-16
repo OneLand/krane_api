@@ -7,9 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-/**
- * Created by jhpark1220 on 2017. 6. 30..
- */
 public interface RoomMembersRepository extends JpaRepository<RoomMembers, Long> {
     List<RoomMembers> findByRoomId(long roomId);
     List<RoomMembers> findByRoomIdAndJoinType(long roomId, Enumerations.RoomJoinType type);

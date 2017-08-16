@@ -27,9 +27,6 @@ import java.util.List;
 
 import static com.gachaland.api.common.Enumerations.MemberType.GUEST;
 
-/**
- * Created by jhpark1220 on 2017. 6. 7..
- */
 @Service
 public class MemberService {
 
